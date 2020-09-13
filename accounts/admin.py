@@ -1,5 +1,5 @@
-from django.contrib import admin
 from .models import User
+from .email_activation import EmailActivation
 from .forms import UserAdminChangeForm, UserAdminCreationForm
 from django.contrib import admin
 from django.contrib.auth.models import Group
@@ -31,6 +31,14 @@ class UserAdmin(UserAdmin):
     list_filter = ()
     ordering = ('email',)
     filter_horizontal = ()
+
+
+@admin.register(EmailActivation)
+class EmailActivationAdmin(admin.ModelAdmin):
+    search_fields = ['email']
+
+    class Meta:
+        model: EmailActivation
 
 
 admin.site.unregister(Group)

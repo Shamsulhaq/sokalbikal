@@ -9,9 +9,24 @@ https://docs.djangoproject.com/en/3.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
-
+import os
 from pathlib import Path
+from django.contrib.messages import constants as messages
+from .mail_info import *
+# Mail information
+EMAIL_HOST = EMAIL_HOST
+EMAIL_HOST_USER = EMAIL_HOST_USER  # SET EMAIL
+EMAIL_HOST_PASSWORD = EMAIL_HOST_PASSWORD  # SET PASSWORD OR APP PASSWORD
+EMAIL_PORT = EMAIL_PORT
+EMAIL_USE_TLS = EMAIL_USE_TLS
+DEFAULT_FROM_EMAIL = 'Sokalbikal'
+BASE_URL = '127.0.0.1:8000'  # SET YOUR BASE URL [BASE_URL = '127.0.0.1:8000']
 
+MANAGERS = [
+    ('Shamsul Haq', 'shamsulcitycse@gmail.com'),  # Just like ('khan', 'khan@gmail.com')
+]
+
+ADMINS = MANAGERS
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -35,8 +50,25 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+]
+THIRD_PARTY_APPS = [
+    'widget_tweaks'
+]
+
+LOCAL_APPS = [
     'accounts',
 ]
+
+INSTALLED_APPS += THIRD_PARTY_APPS + LOCAL_APPS
+# Custom User Auth
+AUTH_USER_MODEL = 'accounts.User'
+
+# Login and Logout
+LOGIN_URL = '/account/login/'
+LOGIN_URL_REDIRECT = '/'
+LOGOUT_URL = '/logout/'
+LOGOUT_URL_REDIRECT = '/'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -50,13 +82,10 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'sokalbikall.urls'
 
-# add custom User
-AUTH_USER_MODEL = 'accounts.User'
-
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR,'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -92,7 +121,6 @@ DATABASES = {
     }
 }
 
-
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
 
@@ -116,7 +144,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'asia/Dhaka'
+TIME_ZONE = 'Asia/Bishkek'
 
 USE_I18N = True
 
@@ -124,7 +152,26 @@ USE_L10N = True
 
 USE_TZ = True
 
+# Message framework
+MESSAGE_TAGS = {
+    messages.INFO: 'alert alert-info',
+    messages.SUCCESS: 'alert alert-success',
+    messages.WARNING: 'alert alert-warning',
+    messages.ERROR: 'alert alert-danger',
+    messages.DEBUG: 'alert alert-info',
+}
+
 # Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/3.1/howto/static-files/
+# https://docs.djangoproject.com/en/2.1/howto/static-files/
+
 
 STATIC_URL = '/static/'
+
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "static")
+]
+STATIC_ROOT = "/static/"
+
+MEDIA_URL = '/media/'
+
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
