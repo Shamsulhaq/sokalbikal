@@ -5,6 +5,7 @@ from django.core.files.storage import FileSystemStorage
 from django.db import models
 from django.db.models.signals import pre_save, post_save
 from django.template.defaultfilters import slugify
+from django.urls import reverse
 
 from accounts.models import User
 from sokalbikall.utils import unique_slug_generator
@@ -27,6 +28,20 @@ def upload_image_path(inistance, file_name):
     return f"vendor/{vendor_name}/{final_filename}"
 
 
+class VendorQuerySet(models.QuerySet):
+
+    def get_all(self):
+        return self.filter(approval=True)
+
+
+class VendorManager(models.Manager):
+    def get_queryset(self):
+        return VendorQuerySet(self.model, using=self._db)
+
+    def all(self):
+        return self.get_queryset().get_all()
+
+
 # Create your models here.
 class Vendor(models.Model):
     vendor = models.ForeignKey(User, on_delete=models.CASCADE, related_name='vendor_rl')
@@ -38,6 +53,7 @@ class Vendor(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)
     last_update = models.DateTimeField(auto_now=True)
     slug = models.SlugField(blank=True, null=True, unique=True, allow_unicode=True)
+    objects = VendorManager()
 
     def __str__(self):
         return str(self.vendor)
@@ -45,6 +61,9 @@ class Vendor(models.Model):
     @property
     def title(self):
         return self.shop_name
+
+    def get_absolute_update_url(self):
+        return reverse("vendor-profile-update", kwargs={"slug": self.slug})
 
 
 def vendor_pre_save_receiver(sender, instance, *args, **kwargs):

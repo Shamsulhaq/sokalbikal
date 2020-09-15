@@ -1,11 +1,122 @@
 {% extends 'base.html' %}
 {% block content %}
-    <div class="row">
-        <div class="col-md-6 col-sm-auto">
-            <h3>Profile Details</h3>
+    <br>
+    <div class="card">
+        <div class="card-header">
+
+            <h3 class="float-left">User and Account Info</h3>
+            <a class="float-right" href="{% url 'password_change' %}">Change your Passworld</a>
         </div>
-        <div class="col-md-6 col-sm-auto">
-            <h3>Last uses</h3>
+        <div class="card-body">
+            <div class="row text-center">
+                <div class="col-sm-4">
+                    <div class="product-image">
+                        <img width="220px" height="200" class="img-thumbnail" alt="{{ object.get_full_name }}"
+                             src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973461_1280.png">
+                    </div>
+                </div>
+                <table class="table col-sm-8">
+                    <tbody>
+                    <tr>
+                        <th style="border-top: 0px;" scope="row">Name:</th>
+                        <td style="border-top: 0px;">{{ object.get_full_name }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Email:</th>
+                        <td>{{ object.email }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Phone Number:</th>
+                        <td>{{ object.phone }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Joined:</th>
+                        <td>{{ object.date_joined }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Account role:</th>
+                        <td> {{ object.role }}</td>
+
+                    </tr>
+                    </tbody>
+
+                </table>
+
+            </div>
         </div>
     </div>
+    <br>
+    {% if object.role == 'vendor' %}
+    <div class="card">
+        <div class="card-header">
+            <h3 class="float-left">You are a '{{ object.role.capitalize }}'</h3>
+            <a class="float-right" href="{{ user_object.get_absolute_update_url }}">Update Info</a>
+        </div>
+        <div class="card-body">
+            <div class="row text-center">
+                <div class="col-sm-4">
+                    <div class="product-image">
+                        <img width="220px" height="200" class="img-thumbnail" alt="{{ object.get_full_name }}"
+                             src="{{ user_object.image.url }}">
+                    </div>
+                </div>
+                <table class="table col-sm-8">
+                    <tbody>
+                    <tr>
+                        <th style="border-top: 0px;" scope="row">Shop Name:</th>
+                        <td style="border-top: 0px;">{{ user_object.shop_name }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Address:</th>
+                        <td>{{ user_object.shop_location }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Description:</th>
+                        <td>{{ user_object.description }}</td>
+                    </tr>
+                    </tbody>
+
+                </table>
+
+            </div>
+        </div>
+    </div>
+    {% else %}
+        <div class="card">
+        <div class="card-header">
+            <h3 class="float-left">You are a '{{ object.role.capitalize }}'</h3>
+            <a class="float-right" href="{{ user_object.get_absolute_update_url }}">Update Info</a>
+        </div>
+        <div class="card-body">
+            <div class="row text-center">
+                <div class="col-sm-4">
+                    <div class="product-image">
+                        <img width="220px" height="200" class="img-thumbnail" alt="{{ object.get_full_name }}"
+                             src="{{ user_object.image.url }}">
+                    </div>
+                </div>
+                <table class="table col-sm-8">
+                    <tbody>
+                    <tr>
+                        <th style="border-top: 0px;" scope="row">Name:</th>
+                        <td style="border-top: 0px;">{{ object.get_full_name }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Address:</th>
+                        <td>{{ user_object.address }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Date Of Birth:</th>
+                        <td>+968 {{ user_object.date_of_birth }}</td>
+                    </tr>
+                    </tbody>
+
+                </table>
+
+            </div>
+        </div>
+    </div>
+    {% endif %}
 {% endblock %}
+
+

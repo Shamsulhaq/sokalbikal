@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block title %} {{ title }} || {{ block.super }}{% endblock title %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block content %}
+    <div class="align-content-center col-sm-auto col-lg-6 col-md-6">
+        <div class="card-body">
+            {% include 'form.html' %}
+        </div><!-- end of card body -->
+    </div><!-- end of card -->
+
+{% endblock %}

@@ -1,3 +1,4 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.views.generic import FormView, CreateView, View, TemplateView,DetailView
@@ -7,11 +8,16 @@ from django.utils.http import is_safe_url
 from django.utils.safestring import mark_safe
 from django.contrib.messages.views import SuccessMessageMixin, messages
 
+from customer.models import Customer
+from vendor.models import Vendor
 from .forms import UserLoginForm, UserRegistrationForm, ReactivateEmailFrom
 from .email_activation import EmailActivation
 
 
 # Create your views here.
+from .models import User
+
+
 class RequestFormAttachMixin(object):
     def get_form_kwargs(self):
         kwargs = super(RequestFormAttachMixin, self).get_form_kwargs()
@@ -76,7 +82,7 @@ class UserRegistrationView(SuccessMessageMixin, CreateView):
 
 
 class AccountEmailActivateView(FormMixin, View):
-    success_url = '/account/login/'
+    success_url = '/login/'
     form_class = ReactivateEmailFrom
     key = None
 
@@ -129,8 +135,25 @@ class AccountEmailActivateView(FormMixin, View):
         return render(self.request, 'registration/activation_error.html', context)
 
 
-class ProfileView(DetailView):
+class ProfileView(LoginRequiredMixin, DetailView):
+    model = User
     template_name = 'accounts/profile_details.html'
+
+    def get_object(self, queryset=None):
+        return self.request.user
+
+    def get_context_data(self, **kwargs):
+        context = super(ProfileView, self).get_context_data(**kwargs)
+        user = self.request.user
+        if self.object.role == 'vendor':
+            vendor = Vendor.objects.get(vendor=user)
+            context['user_object'] = vendor
+        elif self.object.role == 'customer':
+            customer = Customer.objects.get(person=user)
+            context['user_object'] = customer
+        print(context)
+        return context
+
 
 def get_logout(request):
     logout(request)

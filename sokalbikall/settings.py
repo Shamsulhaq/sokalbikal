@@ -68,7 +68,7 @@ INSTALLED_APPS += THIRD_PARTY_APPS + LOCAL_APPS
 AUTH_USER_MODEL = 'accounts.User'
 
 # Login and Logout
-LOGIN_URL = '/account/login/'
+LOGIN_URL = '/login/'
 LOGIN_URL_REDIRECT = '/'
 LOGOUT_URL = '/logout/'
 LOGOUT_URL_REDIRECT = '/'
