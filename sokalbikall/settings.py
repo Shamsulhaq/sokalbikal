@@ -60,6 +60,7 @@ LOCAL_APPS = [
     'accounts',
     'product',
     'vendor',
+    'customer',
 ]
 
 INSTALLED_APPS += THIRD_PARTY_APPS + LOCAL_APPS
