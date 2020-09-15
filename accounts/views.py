@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.urls import reverse
-from django.views.generic import FormView, CreateView, View, TemplateView
+from django.views.generic import FormView, CreateView, View, TemplateView,DetailView
 from django.views.generic.edit import FormMixin
 from django.contrib.auth import authenticate, login, logout
 from django.utils.http import is_safe_url
@@ -128,6 +128,9 @@ class AccountEmailActivateView(FormMixin, View):
         }
         return render(self.request, 'registration/activation_error.html', context)
 
+
+class ProfileView(DetailView):
+    template_name = 'accounts/profile_details.html'
 
 def get_logout(request):
     logout(request)

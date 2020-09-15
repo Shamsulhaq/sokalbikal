@@ -77,7 +77,7 @@ fabric.properties
 .idea/
 .idea/*
 venv/*
-
+media/*
 # Dependency directories
 *node_modules/*
 

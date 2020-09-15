@@ -104,9 +104,11 @@ class UserLoginForm(forms.Form):
 
 
 class UserRegistrationForm(forms.ModelForm):
+    Role = (('customer','Customer'),
+            ('vendor','Vendor'))
     password1 = forms.CharField(max_length=32, label='password', widget=forms.PasswordInput)
     password2 = forms.CharField(max_length=32, label='Password Confirmation', widget=forms.PasswordInput)
-
+    role = forms.ChoiceField(choices=Role,label='Register as a')
     class Meta:
         model = User
         fields = (
@@ -129,6 +131,9 @@ class UserRegistrationForm(forms.ModelForm):
         user = super(UserRegistrationForm, self).save(commit=False)
         user.set_password(self.cleaned_data['password1'])
         user.is_active = False
+        role = self.cleaned_data.get('role')
+        if role:
+            user.role = role
         if commit:
             user.save()
         return user

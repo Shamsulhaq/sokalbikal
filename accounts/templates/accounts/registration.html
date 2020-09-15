@@ -4,15 +4,10 @@
 {% load widget_tweaks %}
 
 {% block content %}
-<div>
-    <h1>User Registration</h1><hr/>
-    <div class="" align="" style="margin-left: 14rem;">
-        <div class="card" style="width: 40rem; margin-top: 2rem;">
-            <div class="card-header text-left"><b>User Registration</b></div>
-            <div class="card-body">
-                {% include 'form.html' %}
-            </div><!-- end of card body -->
-        </div><!-- end of card -->
-    </div>
-</div>
+    <div class="align-content-center col-sm-auto col-lg-6 col-md-6">
+        <div class="card-body">
+            {% include 'form.html' %}
+        </div><!-- end of card body -->
+    </div><!-- end of card -->
+
 {% endblock %}
