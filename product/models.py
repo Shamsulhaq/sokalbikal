@@ -121,9 +121,6 @@ class AttributeQuerySet(models.QuerySet):
     def get_all(self):
         return self.filter(is_active=True)
 
-    # def get_by_vendor(self,user):
-    #     return self.filter(product.creator = user)
-
 
 class AttributeManager(models.Manager):
     def get_queryset(self):
@@ -143,7 +140,7 @@ class AttributeManager(models.Manager):
 
 
 class ProductAttribute(models.Model):
-    size = models.FloatField()
+    size = models.CharField(max_length=220)
     regular_price = models.DecimalField(max_digits=9, decimal_places=2, default=0, blank=True, null=True)
     price = models.DecimalField(max_digits=9, decimal_places=2, default=0)
     product = models.ForeignKey(Product, related_name='product_size', on_delete=models.CASCADE)
@@ -159,6 +156,36 @@ class ProductAttribute(models.Model):
     def title(self):
         return self.product.product_name
 
+    def get_absolute_product_stock_create_url(self):
+        return reverse("product-stock-create", kwargs={"slug": self.slug})
+
+    def get_absolute_attribute_update_url(self):
+        return reverse("product-attribute-update", kwargs={"slug": self.slug})
+
+
+# ======================+ Stock Section +==========================================
+class StockQuerySet(models.QuerySet):
+
+    def get_all(self):
+        return self.filter(is_active=True)
+
+
+class StockManager(models.Manager):
+    def get_queryset(self):
+        return StockQuerySet(self.model, using=self._db)
+
+    def all(self):
+        return self.get_queryset().get_all()
+
+    def get_by_slug(self, slug):
+        qs = self.get_queryset().filter(slug=slug)
+        if qs.count() == 1:
+            return qs.first()
+
+    def get_by_vendor(self, user):
+        qs = self.get_queryset().filter(product__product__creator=user)
+        return qs
+
 
 class Stock(models.Model):
     quantity = models.PositiveIntegerField()
@@ -166,9 +193,18 @@ class Stock(models.Model):
     is_active = models.BooleanField(default=True)
     timestamp = models.DateTimeField(auto_now_add=True)
     last_update = models.DateTimeField(auto_now=True)
+    slug = models.SlugField(blank=True, null=True, unique=True, allow_unicode=True)
+    objects = StockManager()
 
     def __str__(self):
         return "{vendor} -> {product}".format(vendor=self.product.product.creator, product=self.product)
+
+    @property
+    def title(self):
+        return self.product.product.product_name
+
+    def get_absolute_stock_update_url(self):
+        return reverse("product-stock-update", kwargs={"slug": self.slug})
 
 
 # +============================== Signals +===========================================
@@ -197,3 +233,11 @@ def attribute_pre_save_receiver(sender, instance, *args, **kwargs):
 
 
 pre_save.connect(attribute_pre_save_receiver, sender=ProductAttribute)
+
+
+def stock_pre_save_receiver(sender, instance, *args, **kwargs):
+    if not instance.slug:
+        instance.slug = unique_slug_generator(instance)
+
+
+pre_save.connect(stock_pre_save_receiver, sender=Stock)
