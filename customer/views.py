@@ -18,7 +18,7 @@ class CustomerProfileUpdateView(LoginRequiredMixin, UpdateView):
 
     def get_context_data(self, **kwargs):
         context = super(CustomerProfileUpdateView, self).get_context_data(**kwargs)
-        context['title'] = 'Customer Profile Update'
+        context['title'] = 'Profile Update'
         return context
 
     def get_login_url(self):

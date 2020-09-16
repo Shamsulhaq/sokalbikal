@@ -31,7 +31,7 @@
                     </tr>
                     <tr>
                         <th scope="row">Joined:</th>
-                        <td>{{ object.date_joined }}</td>
+                        <td>{{ object.date_joined|date:'d-m-y  h:i a' }}</td>
                     </tr>
                     <tr>
                         <th scope="row">Account role:</th>

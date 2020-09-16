@@ -32,8 +32,8 @@
 {% endblock %}
 <div id="layoutSidenav">
 
-    {% if request.user.is_authenticated  %}
-        {% include 'base/sidebar.html' %}
+    {% if request.user.role == 'vendor'  %}
+        {% include 'vendor_sidebar.html' %}
     {% endif %}
     {% block sidebar %}
 

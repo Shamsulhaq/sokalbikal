@@ -31,7 +31,7 @@ def upload_image_path(inistance, file_name):
 class VendorQuerySet(models.QuerySet):
 
     def get_all(self):
-        return self.filter(approval=True)
+        return self.filter(is_active=True)
 
 
 class VendorManager(models.Manager):
