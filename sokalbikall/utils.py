@@ -17,22 +17,28 @@ def random_string_generator(size=10, chars=string.ascii_lowercase + string.digit
     return ''.join(random.choice(chars) for _ in range(size))
 
 
-def random_number_generator(size=10, chars=string.digits):
+def random_number_generator(size=6, chars=string.digits):
     return ''.join(random.choice(chars) for _ in range(size))
 
 
-def unique_product_id_generator(instance):
-    """
-        This is for a Django project with order_id field.
-    """
-    product_new_id = random_number_generator().upper()
-    # order_new_id = random. for _ in range(10)
+#
+# def unique_product_id_generator(instance):
+#     product_new_id = random_number_generator().upper()
+#     # order_new_id = random. for _ in range(10)
+#     Klass = instance.__class__
+#     qs_exists = Klass.objects.filter(product_id=product_new_id).exists()
+#     if qs_exists:
+#         return unique_product_id_generator(instance)
+#     return product_new_id
 
+def unique_product_id_generator(instance):
     Klass = instance.__class__
-    qs_exists = Klass.objects.filter(product_id=product_new_id).exists()
-    if qs_exists:
-        return unique_order_id_generator(instance)
-    return product_new_id
+    if Klass.objects.all():
+        last = Klass.objects.all().last().product_id
+    else:
+        last = 1000
+    return last + 1
+
 
 def unique_order_id_generator(instance):
     """

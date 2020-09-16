@@ -23,10 +23,10 @@
                 <tbody>
                 {% for attribute in attribute_list %}
                     <tr onclick="window.location='{{ product.id }}/';" data-href=''>
-                        <td>{{ attribute.product.product_id }}</td>
-                        <td>{{ attribute.product.product_name }}</td>
-                        <td>{{ attribute.product.category }}</td>
-                        <td>{{ attribute.product.brand }}</td>
+                        <td>{{ attribute.product_id }}</td>
+                        <td>{{ attribute.item.product_name }}</td>
+                        <td>{{ attribute.item.category }}</td>
+                        <td>{{ attribute.item.brand }}</td>
                         <td>{{ attribute.size }}</td>
                         <td>{{ attribute.regular_price }}</td>
                         <td>{{ attribute.price }} </td>

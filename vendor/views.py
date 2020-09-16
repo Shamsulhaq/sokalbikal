@@ -51,7 +51,7 @@ class CreateProductView(LoginRequiredMixin, VendorRequiredMixin, CreateView):
         return reverse('login')
 
     def get_success_url(self):
-        return reverse('index')
+        return reverse('vendor-product-list')
 
 
 class ProductUpdateView(LoginRequiredMixin, VendorRequiredMixin, UpdateView):
@@ -96,7 +96,7 @@ class VendorProductAttributeCreateView(LoginRequiredMixin, VendorRequiredMixin, 
         slug = self.kwargs.get('slug')
         product = Product.objects.get_by_slug(slug)
         instance = form.save(commit=False)
-        instance.product = product
+        instance.item = product
         return super().form_valid(form)
 
     def get_context_data(self, **kwargs):
@@ -108,7 +108,7 @@ class VendorProductAttributeCreateView(LoginRequiredMixin, VendorRequiredMixin, 
         return reverse('login')
 
     def get_success_url(self):
-        return reverse('product-attribute-list')
+        return reverse('product-stock-list')
 
 
 class ProductAttributeListView(LoginRequiredMixin, VendorRequiredMixin, ListView):
@@ -142,7 +142,7 @@ class ProductAttributeUpdateView(LoginRequiredMixin, VendorRequiredMixin, Update
         return reverse('login')
 
     def get_success_url(self):
-        return reverse('product-attribute-list')
+        return reverse('product-stock-list')
 
 
 class StockCreateView(LoginRequiredMixin, VendorRequiredMixin, CreateView):

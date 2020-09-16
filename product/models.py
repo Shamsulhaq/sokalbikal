@@ -3,7 +3,7 @@ import random
 
 from django.core.files.storage import FileSystemStorage
 from django.db import models
-from django.db.models.signals import pre_save
+from django.db.models.signals import pre_save, post_save
 from django.template.defaultfilters import slugify
 from django.urls import reverse
 from mptt.models import MPTTModel, TreeForeignKey
@@ -81,16 +81,12 @@ class ProductManager(models.Manager):
 
 
 class Product(models.Model):
-    product_id = models.PositiveIntegerField(unique=True, blank=True)
     product_name = models.CharField(max_length=50, unique=True)
     category = TreeForeignKey(Category, on_delete=models.CASCADE, blank=True, null=True,
                               related_name='product_category')
     description = models.TextField()
     image = models.ImageField(upload_to=upload_image_path, blank=True)
     brand = models.CharField(max_length=50)
-    # regular_price = models.DecimalField(max_digits=9, decimal_places=2, default=0, blank=True, null=True)
-    # price = models.DecimalField(max_digits=9, decimal_places=2, default=0)
-    # in_stock = models.PositiveIntegerField()
     creator = models.ForeignKey(User, related_name='product_creator', on_delete=models.CASCADE)
     is_active = models.BooleanField(default=True)
     timestamp = models.DateTimeField(auto_now_add=True)
@@ -99,7 +95,7 @@ class Product(models.Model):
     objects = ProductManager()
 
     class Meta:
-        unique_together = ["product_id", "product_name"]
+        unique_together = ["product_name"]
 
     def __str__(self):
         return self.product_name
@@ -135,26 +131,27 @@ class AttributeManager(models.Manager):
             return qs.first()
 
     def get_by_vendor(self, user):
-        qs = self.get_queryset().filter(product__creator=user)
+        qs = self.get_queryset().filter(item__creator=user)
         return qs
 
 
 class ProductAttribute(models.Model):
+    product_id = models.PositiveIntegerField(unique=True, blank=True)
     size = models.CharField(max_length=220)
     regular_price = models.DecimalField(max_digits=9, decimal_places=2, default=0, blank=True, null=True)
     price = models.DecimalField(max_digits=9, decimal_places=2, default=0)
-    product = models.ForeignKey(Product, related_name='product_size', on_delete=models.CASCADE)
+    item = models.ForeignKey(Product, related_name='product_size', on_delete=models.CASCADE)
     is_active = models.BooleanField(default=True)
     timestamp = models.DateTimeField(auto_now_add=True)
     slug = models.SlugField(blank=True, null=True, unique=True, allow_unicode=True)
     objects = AttributeManager()
 
     def __str__(self):
-        return "{product} -> {size}".format(product=self.product, size=self.size)
+        return "{product} -> {size}".format(product=self.item, size=self.size)
 
     @property
     def title(self):
-        return self.product.product_name
+        return self.item.product_name+self.size
 
     def get_absolute_product_stock_create_url(self):
         return reverse("product-stock-create", kwargs={"slug": self.slug})
@@ -183,7 +180,7 @@ class StockManager(models.Manager):
             return qs.first()
 
     def get_by_vendor(self, user):
-        qs = self.get_queryset().filter(product__product__creator=user)
+        qs = self.get_queryset().get_all().filter(product__item__creator=user)
         return qs
 
 
@@ -197,11 +194,11 @@ class Stock(models.Model):
     objects = StockManager()
 
     def __str__(self):
-        return "{vendor} -> {product}".format(vendor=self.product.product.creator, product=self.product)
+        return "{vendor} -> {product}".format(vendor=self.product.item.creator, product=self.product)
 
     @property
     def title(self):
-        return self.product.product.product_name
+        return self.product.item.product_name
 
     def get_absolute_stock_update_url(self):
         return reverse("product-stock-update", kwargs={"slug": self.slug})
@@ -220,8 +217,6 @@ pre_save.connect(category_pre_save_receiver, sender=Category)
 def product_pre_save_receiver(sender, instance, *args, **kwargs):
     if not instance.slug:
         instance.slug = unique_slug_generator(instance)
-    if not instance.product_id:
-        instance.product_id = unique_product_id_generator(instance)
 
 
 pre_save.connect(product_pre_save_receiver, sender=Product)
@@ -230,6 +225,9 @@ pre_save.connect(product_pre_save_receiver, sender=Product)
 def attribute_pre_save_receiver(sender, instance, *args, **kwargs):
     if not instance.slug:
         instance.slug = unique_slug_generator(instance)
+
+    if not instance.product_id:
+        instance.product_id = unique_product_id_generator(instance)
 
 
 pre_save.connect(attribute_pre_save_receiver, sender=ProductAttribute)
@@ -241,3 +239,11 @@ def stock_pre_save_receiver(sender, instance, *args, **kwargs):
 
 
 pre_save.connect(stock_pre_save_receiver, sender=Stock)
+
+
+def attribute_created_receiver(sender, instance, created, *args, **kwargs):
+    if created:
+        Stock.objects.get_or_create(product=instance, quantity=0)
+
+
+post_save.connect(attribute_created_receiver, sender=ProductAttribute)
