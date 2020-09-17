@@ -3,22 +3,20 @@
 {% block title %} {{ title }} || {{ block.super }}{% endblock title %}
 {% block content %}
     <div class="card-body">
-        <h3 class="h3 float-left">Products</h3>
-        <h1 style="float: right; margin: -10px 0px 10px 0px;">
-            <a title="Add new product" data-toggle="tooltip" data-placement="left" href="{% url 'product-create-url' %}">
-                <i class="fas fa-plus-circle"></i>
-            </a>
-        </h1>
-
+        <h3 class="h3">Total Products </h3>
         <div class="table-responsive">
             <table class="table table-bordered table-hover" id="dataTable" width="100%" cellspacing="0">
                 <thead>
                 <tr>
+                    <th>Product ID</th>
                     <th>Product Name</th>
                     <th>Category</th>
                     <th>Brand</th>
-                    <th>Variant</th>
-                    <th>#</th>
+                    <th>size</th>
+                    <th>Regular Price</th>
+                    <th>Price</th>
+                    <th>In Stock</th>
+                    <th>Update</th>
                     <th>#</th>
                 </tr>
                 </thead>
@@ -26,13 +24,17 @@
                 <tbody>
                 {% for product in product_list %}
                     <tr onclick="window.location='{{ product.id }}/';" data-href=''>
-                        <td>{{ product.product_name }}</td>
-                        <td>{{ product.category }}</td>
-                        <td>{{ product.brand }}</td>
-                        <td>{{ product.product_size.count }}'s</td>
-                        <td><a href="{{ product.get_absolute_product_update_url }}" title="Edit Product"><i
-                                class="fas fa-edit"></i> Update</a></td>
-                        <td><a href="{{ product.get_absolute_product_attribute_create_url }}" title="Product Attribute"><i class="fas fa-plus-circle"></i> Size</a></td>
+                        <td>{{ product.product_id }}</td>
+                        <td>{{ product.item.item_name }}</td>
+                        <td>{{ product.item.category }}</td>
+                        <td>{{ product.item.brand }}</td>
+                        <td>{{ product.size }}</td>
+                        <td>{{ product.regular_price }}</td>
+                        <td>{{ product.price }} </td>
+                        <td>{{ product.quantity }} </td>
+                        <td>{{ product.last_update|date:'d-m-y h:i a' }} </td>
+                        <td><a href="{{ product.get_absolute_update_url }}" title="Update"><i
+                                class="fas fa-edit"></i></a></td>
 
 
                     </tr>

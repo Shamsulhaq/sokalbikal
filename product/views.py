@@ -4,13 +4,13 @@ from django.views.generic import CreateView, UpdateView, ListView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from sokalbikall.permissions_mixin import VendorRequiredMixin
 from vendor.models import Vendor
-from .models import Stock
-from .forms import ProductCreationFrom
+from .models import Product
+from .forms import ItemCreationFrom
 
 
 class AllProductView(ListView):
     template_name = 'product_list.html'
-    model = Stock
+    model = Product
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -18,4 +18,17 @@ class AllProductView(ListView):
         return context
 
     def get_queryset(self):
-        return Stock.objects.all()
+        return Product.objects.all()
+
+
+class AllActiveProductList(ListView):
+    template_name = 'product_list.html'
+    model = Product
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Products'
+        return context
+
+    def get_queryset(self):
+        return Product.objects.all()

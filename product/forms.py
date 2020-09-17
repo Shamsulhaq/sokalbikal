@@ -1,13 +1,13 @@
 from django import forms
 
-from .models import Product, ProductAttribute, Stock
+from .models import Item, Product
 
 
-class ProductCreationFrom(forms.ModelForm):
+class ItemCreationFrom(forms.ModelForm):
     class Meta:
-        model = Product
+        model = Item
         fields = [
-            'product_name',
+            'item_name',
             'category',
             'description',
             'image',
@@ -15,19 +15,16 @@ class ProductCreationFrom(forms.ModelForm):
         ]
 
 
-class AttributeCreationFrom(forms.ModelForm):
+class ProductCreationFrom(forms.ModelForm):
     class Meta:
-        model = ProductAttribute
+        model = Product
         fields = [
             'size',
+            'quantity',
             'regular_price',
             'price',
+            'is_return'
         ]
 
 
-class StockManageForm(forms.ModelForm):
-    class Meta:
-        model = Stock
-        fields = [
-            'quantity',
-        ]
+
