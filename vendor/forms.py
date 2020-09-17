@@ -20,3 +20,15 @@ class VendorUpdateForm(forms.ModelForm):
             'trade_licence'
         )
 
+
+class VendorStatusUpdateForm(forms.ModelForm):
+
+    class Meta:
+        model = Vendor
+        fields = (
+            'is_active',
+        )
+        labels ={
+            'is_active':'Are You Agree to Verified'
+        }
+

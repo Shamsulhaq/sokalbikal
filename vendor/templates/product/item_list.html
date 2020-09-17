@@ -3,7 +3,7 @@
 {% block title %} {{ title }} || {{ block.super }}{% endblock title %}
 {% block content %}
     <div class="card-body">
-        <h3 class="h3 float-left">Products</h3>
+        <h3 class="h3 float-left">{{ title }}</h3>
         <h1 style="float: right; margin: -10px 0px 10px 0px;">
             <a title="Add new product" data-toggle="tooltip" data-placement="left" href="{% url 'item-create-url' %}">
                 <i class="fas fa-plus-circle"></i>

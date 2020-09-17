@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        .zoom {
+            margin: 0 auto;
+        }
+
+        .zoom:hover {
+            -ms-transform: scale(2); /* IE 9 */
+            -webkit-transform: scale(2); /* Safari 3-8 */
+            transform: scale(2);
+        }
+    </style>
+    <br>
+
+    <div class="card">
+        <div class="card-header">
+            <h3 class="float-left">'{{ object.item.item_name }}'</h3>
+            <h5 class="float-right">{{ object.size }} </h5>
+        </div>
+        <div class="card-body">
+            <div class="row text-center">
+                <div class="col-sm-auto col-md-5">
+                    <div class="product-image">
+                        {% if object.item.image %}
+                            <img width="420px" height="400" class="img-thumbnail"
+                                 alt="{{ object.item.item_name }}"
+                                 src="{{ object.item.image.url }}">
+                        {% else %}
+                            <img width="420px" height="400" class="img-thumbnail"
+                                 alt="{{ object.item.item_name }}"
+                                 src="">
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="col-md-7 col-sm-auto">
+                    <table style="font-size:16px; text-align: left; " class="table border table-striped">
+                        <tbody>
+                        <tr>
+                            <th style="border-top: 0px;" scope="row">Product ID:</th>
+                            <td style="border-top: 0px;">{{ object.product_id }}</td>
+                        </tr>
+                        <tr>
+                            <th style="border-top: 0px;" scope="row">Price:</th>
+                            <td style="border-top: 0px;">{{ object.price }} BDT</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Regular Price:</th>
+                            <td>{{ object.regular_price }} BDT</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Category:</th>
+                            <td>{{ object.item.category }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Brand:</th>
+                            <td>{{ object.item.brand }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Stock Quantity:</th>
+                            <td>{{ object.quantity }}'s</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Last Update:</th>
+                            <td>{{ object.last_update|date:'d-m-y (h:i a)'}}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Return Policy:</th>
+                            {% if object.is_return %}
+                                <td class="text-primary">Yes <i class="fas fa-user-check"></i></td>
+                            {% else %}
+                                <td class="text-danger">No</td>
+                            {% endif %}
+                        </tr>
+                        <tr>
+                            <th>Description:</th>
+                            <td>{{ object.item.description|linebreaks }}</td>
+                        </tr>
+                        </tbody>
+
+                    </table>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+{% endblock %}
+
+

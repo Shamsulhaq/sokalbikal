@@ -3,7 +3,7 @@
 {% block title %} {{ title }} || {{ block.super }}{% endblock title %}
 {% block content %}
     <div class="card-body">
-        <h3 class="h3">Total Products </h3>
+        <h3 class="h3">{{ title }}</h3>
         <div class="table-responsive">
             <table class="table table-bordered table-hover" id="dataTable" width="100%" cellspacing="0">
                 <thead>
@@ -23,7 +23,7 @@
 
                 <tbody>
                 {% for product in product_list %}
-                    <tr onclick="window.location='{{ product.id }}/';" data-href=''>
+                    <tr onclick="window.location='{{ product.get_absolute_vendor_product_details_url }}';" data-href=''>
                         <td>{{ product.product_id }}</td>
                         <td>{{ product.item.item_name }}</td>
                         <td>{{ product.item.category }}</td>

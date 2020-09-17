@@ -7,7 +7,7 @@ from django.db.models.signals import pre_save, post_save
 from django.template.defaultfilters import slugify
 from django.urls import reverse
 from mptt.models import MPTTModel, TreeForeignKey
-
+from django.db.models import Q
 from accounts.models import User
 from vendor.models import Vendor
 
@@ -115,6 +115,18 @@ class ProductQuerySet(models.QuerySet):
     def get_all(self):
         return self.filter(is_active=True)
 
+    def get_active_vendor_all(self):
+        return self.filter(item__creator__is_active=True)
+
+    def search(self, keyword):
+        lookups = (
+                Q(item__item__name__icontains=keyword) |
+                Q(item__description__icontains=keyword) |
+                Q(item__category__keyword__icontains=keyword) |
+                Q(item__brand__icontains=keyword))
+
+        return self.active().filter(lookups).distinct()
+
 
 class ProductManager(models.Manager):
     def get_queryset(self):
@@ -132,8 +144,11 @@ class ProductManager(models.Manager):
         qs = self.get_queryset().filter(item__creator=user)
         return qs
 
-    # def active_vendor_product(self):
-    #     qs = self.get_queryset().filter(item__creator__=)
+    def search(self, query):
+        return self.get_queryset().search(keyword=query)
+
+    def get_active_vendor_product(self):
+        return self.get_queryset().get_active_vendor_all()
 
 
 class Product(models.Model):
@@ -157,8 +172,8 @@ class Product(models.Model):
     def title(self):
         return self.item.item_name+self.size
 
-    # def get_absolute_product_stock_create_url(self):
-    #     return reverse("product-stock-create", kwargs={"slug": self.slug})
+    def get_absolute_vendor_product_details_url(self):
+        return reverse("-vendor-product-details", kwargs={"slug": self.slug})
 
     def get_absolute_update_url(self):
         return reverse("product-update", kwargs={"slug": self.slug})
