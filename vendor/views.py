@@ -6,7 +6,7 @@ from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.views.generic import FormView, CreateView, View, ListView, DetailView, UpdateView
 
-from product.models import Product, ProductAttribute,Stock
+from product.models import Product, ProductAttribute, Stock
 from .forms import VendorUpdateForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from sokalbikall.permissions_mixin import VendorRequiredMixin
@@ -60,7 +60,7 @@ class ProductUpdateView(LoginRequiredMixin, VendorRequiredMixin, UpdateView):
 
     def get_queryset(self):
         slug = self.kwargs.get('slug')
-        return Product.objects.filter(slug=slug)
+        return Product.objects.filter(slug=slug, creator=self.request.user)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -188,7 +188,7 @@ class ProductStockUpdateView(LoginRequiredMixin, VendorRequiredMixin, UpdateView
 
     def get_queryset(self):
         slug = self.kwargs.get('slug')
-        return Stock.objects.filter(slug=slug)
+        return Stock.objects.filter(slug=slug, )
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

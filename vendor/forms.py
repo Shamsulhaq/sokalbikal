@@ -14,6 +14,9 @@ class VendorUpdateForm(forms.ModelForm):
             'shop_name',
             'shop_location',
             'description',
-            'image'
+            'image',
+            'help_line',
+            'shop_type',
+            'trade_licence'
         )
 
