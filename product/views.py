@@ -31,4 +31,4 @@ class AllActiveProductList(ListView):
         return context
 
     def get_queryset(self):
-        return Product.objects.all()
+        return Product.objects.get_active_vendor_product()
