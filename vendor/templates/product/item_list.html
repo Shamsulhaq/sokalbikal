@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %} {{ title }} || {{ block.super }}{% endblock title %}
+{% block content %}
+    <div class="card-body">
+        <h3 class="h3 float-left">Products</h3>
+        <h1 style="float: right; margin: -10px 0px 10px 0px;">
+            <a title="Add new product" data-toggle="tooltip" data-placement="left" href="{% url 'item-create-url' %}">
+                <i class="fas fa-plus-circle"></i>
+            </a>
+        </h1>
+
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover" id="dataTable" width="100%" cellspacing="0">
+                <thead>
+                <tr>
+                    <th>Product Name</th>
+                    <th>Category</th>
+                    <th>Brand</th>
+                    <th>Variant</th>
+                    <th>#</th>
+                    <th>#</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                {% for item in item_list %}
+                    <tr onclick="window.location='{{ item.id }}/';" data-href=''>
+                        <td>{{ item.item_name }}</td>
+                        <td>{{ item.category }}</td>
+                        <td>{{ item.brand }}</td>
+                        <td>{{ item.product_size.count }}'s</td>
+                        <td><a href="{{ item.get_absolute_product_update_url }}" title="Edit Product"><i
+                                class="fas fa-edit"></i> Update</a></td>
+                        <td><a href="{{ item.get_absolute_product_attribute_create_url }}" title="Product Attribute"><i class="fas fa-plus-circle"></i> Size</a></td>
+
+
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+{% endblock %}

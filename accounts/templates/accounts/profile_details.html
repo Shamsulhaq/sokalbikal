@@ -47,75 +47,119 @@
     </div>
     <br>
     {% if object.role == 'vendor' %}
-    <div class="card">
-        <div class="card-header">
-            <h3 class="float-left">You are a '{{ object.role.capitalize }}'</h3>
-            <a class="float-right" href="{{ user_object.get_absolute_update_url }}">Update Info</a>
-        </div>
-        <div class="card-body">
-            <div class="row text-center">
-                <div class="col-sm-4">
-                    <div class="product-image">
-                        <img width="220px" height="200" class="img-thumbnail" alt="{{ object.get_full_name }}"
-                             src="{{ user_object.image.url }}">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="float-left">You are a '{{ object.role.capitalize }}'</h3>
+                <a class="float-right" href="{{ user_object.get_absolute_update_url }}">Update Info</a>
+            </div>
+            <div class="card-body">
+                <div class="row text-center">
+                    <div class="col-sm-4">
+                        <div class="product-image">
+                            {% if user_object.image %}
+                                <img width="220px" height="200" class="img-thumbnail" alt="{{ object.get_full_name }}"
+                                     src="{{ user_object.image.url }}">
+                            {% else %}
+                                <img width="220px" height="200" class="img-thumbnail" alt="{{ object.get_full_name }}"
+                                     src="">
+                            {% endif %}
+                        </div>
+                    <h4> Shope Logo</h4>
+                        <div class="product-image">
+                            {% if user_object.trade_licence %}
+                                <img width="220px" height="200" class="img-thumbnail" alt="{{ object.get_full_name }} Trade Licence copy"
+                                     src="{{ user_object.trade_licence.url }}">
+                            {% else %}
+                                <img width="220px" height="200" class="img-thumbnail" alt="{{ object.get_full_name }} Trade Licence copy"
+                                     src="">
+                            {% endif %}
+                        </div>
+                    <h4>Trade Licence</h4>
                     </div>
+                    <table class="table col-sm-8">
+                        <tbody>
+                        <tr>
+                            <th style="border-top: 0px;" scope="row">Shop Name:</th>
+                            <td style="border-top: 0px;">{{ user_object.shop_name }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Address:</th>
+                            <td>{{ user_object.shop_location }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Description:</th>
+                            <td>{{ user_object.description }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Shop Type:</th>
+                            <td>{{ user_object.shop_type }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Help Line:</th>
+                            <td>{{ user_object.help_line }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Status:</th>
+                            <td>{% if user_object.is_verified %}Verified{% else %}Unverified{% endif %}</td>
+                        </tr>
+                        <tr>
+                            <th></th>
+                            <td>{% if user_object.is_verified %}{% else %}<h4 class="text-danger">You have Verified for published your product</h4>{% endif %}</td>
+                        </tr>
+                        </tbody>
+
+                    </table>
+
                 </div>
-                <table class="table col-sm-8">
-                    <tbody>
-                    <tr>
-                        <th style="border-top: 0px;" scope="row">Shop Name:</th>
-                        <td style="border-top: 0px;">{{ user_object.shop_name }}</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">Address:</th>
-                        <td>{{ user_object.shop_location }}</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">Description:</th>
-                        <td>{{ user_object.description }}</td>
-                    </tr>
-                    </tbody>
-
-                </table>
-
             </div>
         </div>
-    </div>
+    {% elif object.role == 'customer' %}
+        <div class="card">
+            <div class="card-header">
+                <h3 class="float-left">You are a '{{ object.role.capitalize }}'</h3>
+
+                <a class="float-right" href="{{ user_object.get_absolute_update_url }}">Update Info</a>
+            </div>
+            <div class="card-body">
+                <div class="row text-center">
+                    <div class="col-sm-4">
+                        <div class="product-image">
+                            {% if user_object.image %}
+                                <img width="220px" height="200" class="img-thumbnail" alt="{{ object.get_full_name }}"
+                                     src="{{ user_object.image.url }}">
+                            {% else %}
+                                <img width="220px" height="200" class="img-thumbnail" alt="{{ object.get_full_name }}"
+                                     src="">
+                            {% endif %}
+                        </div>
+                    </div>
+                    <table class="table col-sm-8">
+                        <tbody>
+                        <tr>
+                            <th style="border-top: 0px;" scope="row">Name:</th>
+                            <td style="border-top: 0px;">{{ object.get_full_name }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Address:</th>
+                            <td>{{ user_object.address }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Date Of Birth:</th>
+                            <td>+968 {{ user_object.date_of_birth }}</td>
+                        </tr>
+                        </tbody>
+
+                    </table>
+
+                </div>
+            </div>
+        </div>
     {% else %}
         <div class="card">
-        <div class="card-header">
-            <h3 class="float-left">You are a '{{ object.role.capitalize }}'</h3>
-            <a class="float-right" href="{{ user_object.get_absolute_update_url }}">Update Info</a>
-        </div>
-        <div class="card-body">
-            <div class="row text-center">
-                <div class="col-sm-4">
-                    <div class="product-image">
-                        <img width="220px" height="200" class="img-thumbnail" alt="{{ object.get_full_name }}"
-                             src="{{ user_object.image.url }}">
-                    </div>
-                </div>
-                <table class="table col-sm-8">
-                    <tbody>
-                    <tr>
-                        <th style="border-top: 0px;" scope="row">Name:</th>
-                        <td style="border-top: 0px;">{{ object.get_full_name }}</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">Address:</th>
-                        <td>{{ user_object.address }}</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">Date Of Birth:</th>
-                        <td>+968 {{ user_object.date_of_birth }}</td>
-                    </tr>
-                    </tbody>
-
-                </table>
-
+            <div class="card-header">
+                <h3 class="float-left">You are a '{{ object.role.capitalize }}'</h3>
             </div>
         </div>
-    </div>
     {% endif %}
 {% endblock %}
 

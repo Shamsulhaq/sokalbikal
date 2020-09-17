@@ -1,5 +1,47 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block title %} {{ title }} || {{ block.super }}{% endblock title %}
 {% block content %}
+    <div class="card-body">
+        <h3 class="h3">Products</h3>
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover" id="dataTable" width="100%" cellspacing="0">
+                <thead>
+                <tr>
+                    <th>#ID</th>
+                    <th>Product Name</th>
+                    <th>Category</th>
+                    <th>Brand</th>
+                    <th>Shop</th>
+                    <th>size</th>
+                    <th>Regular Price</th>
+                    <th>Price</th>
+                    <th>In Stock</th>
+                    <th>Crate At</th>
+                    <th>Update At</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                {% for product in object_list %}
+                    <tr onclick="window.location='{{ product.id }}/';" data-href=''>
+                        <td>{{ product.product_id }}</td>
+                        <td>{{ product.item.item_name }}</td>
+                        <td>{{ product.item.category }}</td>
+                        <td>{{ product.item.brand }}</td>
+                        <td>{{ product.item.creator.vendor_rl.get }}</td>
+                        <td>{{ product.size }}</td>
+                        <td>{{ product.regular_price }}</td>
+                        <td>{{ product.price }} </td>
+                        <td>{{ product.quantity }} </td>
+                        <td>{{ product.timestamp|date:'d-m-y h:i' }} </td>
+                        <td>{{ product.last_update|date:'d-m-y h:i' }} </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
 
 {% endblock %}
