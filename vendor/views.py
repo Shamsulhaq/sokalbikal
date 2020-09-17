@@ -149,3 +149,8 @@ class ProductUpdateView(LoginRequiredMixin, VendorRequiredMixin, UpdateView):
 
     def get_success_url(self):
         return reverse('vendor-product-list')
+
+
+class ProductDetailsView(LoginRequiredMixin,VendorRequiredMixin, DetailView):
+    template_name = 'product/product_details.html'
+    model = Product

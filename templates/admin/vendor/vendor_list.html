@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %} {{ title }} || {{ block.super }}{% endblock title %}
+{% block content %}
+    <div class="card-body">
+        <h3 class="h3">Vendors</h3>
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover" id="dataTable" width="100%" cellspacing="0">
+                <thead>
+                <tr>
+                    <th>Vendor Name</th>
+                    <th>Shop name</th>
+                    <th>Shop Location</th>
+                    <th>Help Line</th>
+                    <th>Shop Type</th>
+                    <th>Logo</th>
+                    <th>Trade Licence</th>
+                    <th>Verified</th>
+                    <th>Joined Date</th>
+                    <th>Updated</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                {% for vendor in object_list %}
+                    <tr onclick="window.location='{{ vendor.get_absolute_url }}';" data-href=''>
+                        <td>{{ vendor.vendor.get_full_name }}</td>
+                        <td>{{ vendor.shop_name }}</td>
+                        <td>{{ vendor.shop_location }}</td>
+                        <td>{{ vendor.help_line }}</td>
+                        <td>{{ vendor.shop_type }}</td>
+                        <td><a href="{{ vendor.image.url }}">View</a></td>
+                        <td><a href="{{ vendor.trade_licence.url }}">View</a></td>
+                        <td>{{ vendor.is_active }} </td>
+                        <td>{{ vendor.timestamp|date:'d-m-y h:i' }} </td>
+                        <td>{{ vendor.last_update|date:'d-m-y h:i' }} </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+{% endblock %}

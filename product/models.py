@@ -172,8 +172,8 @@ class Product(models.Model):
     def title(self):
         return self.item.item_name+self.size
 
-    # def get_absolute_product_stock_create_url(self):
-    #     return reverse("product-stock-create", kwargs={"slug": self.slug})
+    def get_absolute_vendor_product_details_url(self):
+        return reverse("-vendor-product-details", kwargs={"slug": self.slug})
 
     def get_absolute_update_url(self):
         return reverse("product-update", kwargs={"slug": self.slug})

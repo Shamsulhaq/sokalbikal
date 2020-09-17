@@ -5,5 +5,5 @@ from .views import (
 )
 
 urlpatterns = [
-    path('customer/profile/update/<slug>', CustomerProfileUpdateView.as_view(), name='customer-profile-update'),
+    path('customer/profile/update/<pk>', CustomerProfileUpdateView.as_view(), name='customer-profile-update'),
     ]

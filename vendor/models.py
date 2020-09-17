@@ -91,6 +91,12 @@ class Vendor(models.Model):
     def get_absolute_update_url(self):
         return reverse("vendor-profile-update", kwargs={"pk": self.pk})
 
+    def get_absolute_url(self):
+        return reverse('vendor-details-url',kwargs={'slug':self.slug})
+
+    def get_absolute_status_url(self):
+        return reverse('vendor-status-update-url',kwargs={'slug':self.slug})
+
 
 def vendor_pre_save_receiver(sender, instance, *args, **kwargs):
     if instance.shop_name:

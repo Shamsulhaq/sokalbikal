@@ -65,7 +65,7 @@ class Customer(models.Model):
     #     return reverse('post-detail', kwargs={"slug": self.slug})
 
     def get_absolute_update_url(self):
-        return reverse("customer-profile-update", kwargs={"slug": self.slug})
+        return reverse("customer-profile-update", kwargs={"pk": self.pk})
 
     # def get_absolute_delete_url(self):
     #     return reverse("delete-post", kwargs={"slug": self.slug})

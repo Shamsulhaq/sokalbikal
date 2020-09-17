@@ -1,0 +1,126 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        .zoom {
+            margin: 0 auto;
+        }
+
+        .zoom:hover {
+            -ms-transform: scale(2); /* IE 9 */
+            -webkit-transform: scale(2); /* Safari 3-8 */
+            transform: scale(2);
+        }
+    </style>
+    {# ++++++++++++++++++++++++Update Alart++++++++++++++++++++++++++ #}
+    <script>
+        function myFunction(name, title, e) {
+            if (confirm("Are you want to " + title + "-- " + name + "!")) {
+                $('#verified_vendor').submit()
+            } else {
+                e.preventDefault();
+            }
+        }
+    </script>
+    {#    ++++++++++++++++++++++++#}
+    <br>
+
+    <div class="card">
+        <div class="card-header">
+            <h3 class="float-left">'{{ object }}'</h3>
+            <h5 class="float-right">
+                {% if object.is_verified %}
+                    <form id='verified_vendor' method="POST" action="{% url 'vendor-status-update-url' object.slug %}">
+                        {% csrf_token %}
+                        <input type="hidden" name="is_active" value="False">
+                        <a style="padding-left:-10px"
+                           onclick="myFunction('{{ object.shop_name }}')"
+                           class="btn btn-sm btn-danger"> Make UnVerified</a>
+                    </form>
+                {% else %}
+                    <form id='verified_vendor' method="POST" action="{% url 'vendor-status-update-url' object.slug %}">
+                        {% csrf_token %}
+                        <input type="hidden" name="is_active" value="True">
+                        <a style="padding-left:-10px"
+                           onclick="myFunction('{{ object.shop_name }}')"
+                           class="btn btn-sm btn-primary">Make Verified </a>
+                    </form>
+                {% endif %}
+
+            </h5>
+        </div>
+        <div class="card-body">
+            <div class="row text-center">
+                <div class="col-sm-4">
+                    <div class="product-image">
+                        {% if object.image %}
+                            <img width="220px" height="200" class="img-thumbnail"
+                                 alt="{{ object.vendor.get_full_name }}"
+                                 src="{{ object.image.url }}">
+                        {% else %}
+                            <img width="220px" height="200" class="img-thumbnail"
+                                 alt="{{ object.vendor.get_full_name }}"
+                                 src="">
+                        {% endif %}
+                    </div>
+                    <h4> Shop Logo</h4>
+                    <div class="product-image">
+                        {% if object.trade_licence %}
+                            <img width="220px" height="200" class="img-thumbnail zoom"
+                                 alt="{{ object.vendor.get_full_name }} Trade Licence copy"
+                                 src="{{ object.trade_licence.url }}">
+                        {% else %}
+                            <img width="220px" height="200" class="img-thumbnail"
+                                 alt="{{ object.vendor.get_full_name }} Trade Licence copy"
+                                 src="">
+                        {% endif %}
+                    </div>
+                    <h4>Trade Licence</h4>
+                </div>
+                <table class="table col-sm-8">
+                    <tbody>
+                    <tr>
+                        <th style="border-top: 0px;" scope="row">Shop Name:</th>
+                        <td style="border-top: 0px;">{{ object.shop_name }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Address:</th>
+                        <td>{{ object.shop_location }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Description:</th>
+                        <td>{{ object.description }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Shop Type:</th>
+                        <td>{{ object.shop_type }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Help Line:</th>
+                        <td>{{ object.help_line }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Status:</th>
+                    {% if object.is_verified %}
+                        <td class="text-primary">Verified <i class="fas fa-user-check"></i></td>
+                    {% else %}
+                        <td class="text-danger">Unverified</td>
+                        {% endif %}
+                    </tr>
+                    </tbody>
+
+                </table>
+
+            </div>
+        </div>
+    </div>
+
+    {% include 'admin/vendor/product_list.html' %}
+
+{% endblock %}
+
+
