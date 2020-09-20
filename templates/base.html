@@ -43,6 +43,15 @@
     {% endblock %}
     <div id="layoutSidenav_content">
         <main>
+            <div class="align-content-center">
+                {% if messages %}
+                    <div class="messages">
+                        {% for message in messages %}
+                            <p {% if message.tags %} class="text-center {{ message.tags }}"{% endif %}>{{ message }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
             <div class="container-fluid">
                 {% block content %}
 

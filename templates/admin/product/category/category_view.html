@@ -1,0 +1,155 @@
+{% extends 'base.html' %}
+{% load widget_tweaks %}
+{% block title %} {{ title }} || {{ block.super }}{% endblock title %}
+{% block content %}
+    <style>
+        ul, #myUL {
+            list-style-type: none;
+        }
+
+        #myUL {
+            margin: 0;
+            padding: 0;
+        }
+
+        .caret {
+            cursor: pointer;
+            -webkit-user-select: none; /* Safari 3.1+ */
+            -moz-user-select: none; /* Firefox 2+ */
+            -ms-user-select: none; /* IE 10+ */
+            user-select: none;
+        }
+
+        .caret::before {
+            content: "\25B6";
+            color: black;
+            display: inline-block;
+            margin-right: 6px;
+        }
+
+        .caret-down::before {
+            -ms-transform: rotate(90deg); /* IE 9 */
+            -webkit-transform: rotate(90deg); /* Safari */
+        ' transform: rotate(90 deg);
+        }
+
+        .nested {
+            display: none;
+        }
+
+        .active {
+            display: block;
+        }
+    </style>
+    <div class="card-body">
+        <h3 class="h3">{{ title }}</h3>
+        <div class="row">
+            <div class="col-md-6">
+                {#                <div class="table-responsive">#}
+                {#                    <table class="table table-bordered table-hover" id="dataTable" width="100%" cellspacing="0">#}
+                {#                        <thead>#}
+                {#                        <tr>#}
+                {#                            <th>Category</th>#}
+                {#                        </tr>#}
+                {#                        </thead>#}
+                {#                        <tbody>#}
+                {#                        {% for category in object_list %}#}
+                {#                            {% if not category.parent %}#}
+                {#                                <tr onclick="window.location='{{ category.get_absolute_url }}'" data-href=''>#}
+                {#                                    <td>{{ category.keyword }}</td>#}
+                {#                                </tr>#}
+                {#                            {% endif %}#}
+                {#                        {% endfor %}#}
+                {#                        </tbody>#}
+                {#                    </table>#}
+                {#                </div>#}
+                <ul id="myUL">
+                    {% for category in object_list %}
+                        {% if not category.parent %}
+                            <li><span class="caret"><a href="{{ category.get_absolute_url }}">{{ category.keyword }}</a></span>
+                                {% for child in category.children.all %}
+                                    <ul class="nested">
+
+                                        <li><span class="caret"><a href="{{ child.get_absolute_url }}">{{ child.keyword }}</a></span>
+                                            {% for child in child.children.all %}
+                                                <ul class="nested">
+                                                    <li><a href="{{ child.get_absolute_url }}">{{ child.keyword }}</a> </li>
+                                                </ul>
+                                            {% endfor %}
+                                        </li>
+                                    </ul>
+                                {% endfor %}
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+                </ul>
+
+                <script>
+                    var toggler = document.getElementsByClassName("caret");
+                    var i;
+
+                    for (i = 0; i < toggler.length; i++) {
+                        toggler[i].addEventListener("click", function () {
+                            this.parentElement.querySelector(".nested").classList.toggle("active");
+                            this.classList.toggle("caret-down");
+                        });
+                    }
+                </script>
+
+            </div>
+
+            <div class="col-md-6">
+                <div class="align-content-center col-sm-auto ">
+                    <div class="card-body border">
+                        <h4>Create New Category</h4>
+                        <hr>
+                        <form method="post" action="">
+                            {% csrf_token %}
+                            {% for hidden in form.hidden_fields %}
+                                {{ hidden }}
+                            {% endfor %}
+
+                            {% for field in form.visible_fields %}
+                                <div class="form-group row">
+                                    <label class="col-md-4 col-form-label text-left"><b>{{ field.label_tag }}</b></label>
+                                    {% if form.is_bound %}
+                                        {% if field.errors %}
+                                            {% render_field field class="form-control is-invalid" %}
+                                            {% for error in field.errors %}
+                                                <div class="invalid-feedback">
+                                                    {{ error }}
+                                                </div>
+                                            {% endfor %}
+                                        {% else %}
+                                            {% render_field field class="form-control is-valid" %}
+                                        {% endif %}
+                                    {% else %}
+                                        <div class="col-md-8">
+                                            {% render_field field class="form-control" %}
+                                        </div>
+                                    {% endif %}
+                                </div><!-- end of form -->
+                            {% endfor %}
+
+                            <div class="form-group row">
+                                <label class="col-sm-4 col-form-label"></label>
+                                <div class="col-sm-8">
+                                    <button type="submit"
+                                            class="btn btn-secondary btn-lg float-left btn-success float-right">Create
+                                        New
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div><!-- end of card body -->
+                </div><!-- end of card -->
+            </div>
+        </div>
+    </div>
+    <script>
+        // Treeview Initialization
+        $(document).ready(function () {
+            $('.treeview-colorful').mdbTreeview();
+        });
+    </script>
+{% endblock %}

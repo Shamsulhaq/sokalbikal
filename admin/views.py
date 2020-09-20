@@ -1,16 +1,63 @@
 from django.shortcuts import render
 from django.urls import reverse
-from django.views.generic import DetailView, ListView, UpdateView
+from django.views.generic import DetailView, ListView, UpdateView, CreateView, FormView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.edit import FormMixin
-
+from django.contrib.messages.views import SuccessMessageMixin, messages
 from customer.models import Customer
 from customer.forms import CustomerStatusUpdateForm
-from product.models import Product
+from product.models import Product, Category
+from product.forms import CategoryCreationForm
 from sokalbikall.permissions_mixin import AdminRequiredMixin
 from vendor.models import Vendor
 from vendor.forms import VendorStatusUpdateForm
 from django.urls import reverse_lazy
+
+
+class CategoryView(SuccessMessageMixin, LoginRequiredMixin, AdminRequiredMixin, CreateView):
+    template_name = 'admin/product/category/category_view.html'
+    form_class = CategoryCreationForm
+    success_message = 'Category Create Successful.'
+
+    def form_valid(self, form):
+        instance = form.save(commit=False)
+        return super().form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['object_list'] = Category.objects.all()
+        context['title'] = 'Category'
+        return context
+
+    def get_login_url(self):
+        return reverse('login')
+
+    def get_success_url(self):
+        return reverse_lazy('category-view-url')
+
+
+class CategoryDetailsView(LoginRequiredMixin, AdminRequiredMixin, DetailView):
+    template_name = 'admin/product/category/category_detail.html'
+    model = Category
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        cats = []
+        obj = context['object']
+        if obj.level == 0:
+            cats.append(('Category', obj.title))
+        else:
+            for x in range(obj.level + 1, 0, -1):
+                if x == 1:
+                    sub = ''
+                else:
+                    sub = 'Sub ' * (x - 1)
+                cats.append((sub + 'Category', obj.title))
+                obj = obj.parent
+        cats.reverse()
+        context['categories'] = cats
+        return context
+
 
 class VendorListView(LoginRequiredMixin, AdminRequiredMixin, ListView):
     template_name = 'admin/vendor/vendor_list.html'
@@ -73,7 +120,7 @@ class CustomerListView(LoginRequiredMixin, AdminRequiredMixin, ListView):
         return Customer.objects.all()
 
 
-class CustomerDetailsView(LoginRequiredMixin, AdminRequiredMixin, DetailView,FormMixin):
+class CustomerDetailsView(LoginRequiredMixin, AdminRequiredMixin, DetailView, FormMixin):
     template_name = 'admin/customer/customer_details.html'
     model = Customer
     form_class = CustomerStatusUpdateForm

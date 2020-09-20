@@ -51,6 +51,9 @@ class Category(MPTTModel):
     def title(self):
         return self.keyword
 
+    def get_absolute_url(self):
+        return reverse('category-details-url', kwargs={"slug": self.slug})
+
     class Meta:
         verbose_name_plural = 'categories'
 
@@ -159,7 +162,7 @@ class Product(models.Model):
     price = models.DecimalField(max_digits=9, decimal_places=2, default=0)
     item = models.ForeignKey(Item, related_name='product_size', on_delete=models.CASCADE)
     is_active = models.BooleanField(default=True)
-    is_return = models.BooleanField(_('Accept our Return Policy'),default=False,)
+    is_return = models.BooleanField(_('Accept our Return Policy'), default=False, )
     timestamp = models.DateTimeField(auto_now_add=True)
     last_update = models.DateTimeField(auto_now=True)
     slug = models.SlugField(blank=True, null=True, unique=True, allow_unicode=True)
@@ -170,7 +173,7 @@ class Product(models.Model):
 
     @property
     def title(self):
-        return self.item.item_name+self.size
+        return self.item.item_name + self.size
 
     def get_absolute_vendor_product_details_url(self):
         return reverse("-vendor-product-details", kwargs={"slug": self.slug})
@@ -253,7 +256,6 @@ def product_pre_save_receiver(sender, instance, *args, **kwargs):
 
 
 pre_save.connect(product_pre_save_receiver, sender=Product)
-
 
 # def stock_pre_save_receiver(sender, instance, *args, **kwargs):
 #     if not instance.slug:

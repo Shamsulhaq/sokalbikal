@@ -53,7 +53,8 @@ INSTALLED_APPS = [
 
 ]
 THIRD_PARTY_APPS = [
-    'widget_tweaks'
+    'widget_tweaks',
+    'mptt',
 ]
 
 LOCAL_APPS = [
