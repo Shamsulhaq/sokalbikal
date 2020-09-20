@@ -14,7 +14,7 @@ class AllProductView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = 'Products'
+        context['title'] = 'All Product'
         return context
 
     def get_queryset(self):
@@ -27,7 +27,7 @@ class AllActiveProductList(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = 'Products'
+        context['title'] = 'Active Products'
         return context
 
     def get_queryset(self):

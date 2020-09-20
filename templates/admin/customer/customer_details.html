@@ -1,0 +1,113 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        .zoom {
+            margin: 0 auto;
+        }
+
+        .zoom:hover {
+            -ms-transform: scale(2); /* IE 9 */
+            -webkit-transform: scale(2); /* Safari 3-8 */
+            transform: scale(2);
+        }
+    </style>
+    {# ++++++++++++++++++++++++Update Alart++++++++++++++++++++++++++ #}
+    <script>
+        function myFunction(name, title, e) {
+            if (confirm("Are you want to Verified " + name + "!")) {
+                $('#verified_customer').submit()
+            } else {
+                e.preventDefault();
+            }
+        }
+    </script>
+    {#    ++++++++++++++++++++++++#}
+    <br>
+
+    <div class="card">
+        <div class="card-header">
+            <h3 class="float-left">'{{ object }}'</h3>
+            <h5 class="float-right">
+                {% if object.is_active %}
+                    <form id='verified_customer' method="POST" action="{% url 'customer-status-update-url' object.slug %}">
+                        {% csrf_token %}
+                        <input type="hidden" name="is_active" value="False">
+                        <a style="padding-left:-10px"
+                           onclick="myFunction('{{ object.person.get_full_name }}')"
+                           class="btn btn-sm btn-danger"> Make UnVerified</a>
+                    </form>
+                {% else %}
+                    <form id='verified_customer' method="POST" action="{% url 'customer-status-update-url' object.slug %}">
+                        {% csrf_token %}
+                        <input type="hidden" name="is_active" value="True">
+                        <a style="padding-left:-10px"
+                           onclick="myFunction('{{ object.person.get_full_name }}')"
+                           class="btn btn-sm btn-primary">Make Verified </a>
+                    </form>
+                {% endif %}
+
+            </h5>
+        </div>
+        <div class="card-body">
+            <div class="row text-center">
+                <div class="col-sm-4">
+                    <div class="product-image">
+                        {% if object.image %}
+                            <img width="220px" height="200" class="img-thumbnail"
+                                 alt="{{ object.person.get_full_name }}"
+                                 src="{{ object.image.url }}">
+                        {% else %}
+                            <img width="220px" height="200" class="img-thumbnail"
+                                 alt="{{ object.person.get_full_name }}"
+                                 src="">
+                        {% endif %}
+                    </div>
+                </div>
+                <table class="table col-sm-8">
+                    <tbody>
+                    <tr>
+                        <th style="border-top: 0px;" scope="row">Customer Name:</th>
+                        <td style="border-top: 0px;">{{ object.person.get_full_name }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Address:</th>
+                        <td>{{ object.address }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Date Of Birth:</th>
+                        <td>{{ object.date_of_birth }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Phone:</th>
+                        <td>{{ object.person.phone }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Email:</th>
+                        <td>{{ object.person.email }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Status:</th>
+                    {% if object.is_active %}
+                        <td class="text-primary">Verified <i class="fas fa-user-check"></i></td>
+                    {% else %}
+                        <td class="text-danger">Unverified</td>
+                        {% endif %}
+                    </tr>
+                    </tbody>
+
+                </table>
+
+            </div>
+        </div>
+    </div>
+
+{#    {% include 'admin/vendor/product_list.html' %}#}
+
+{% endblock %}
+
+
