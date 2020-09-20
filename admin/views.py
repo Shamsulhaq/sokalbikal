@@ -50,3 +50,8 @@ class VendorStatusUpdateView(LoginRequiredMixin, AdminRequiredMixin, UpdateView)
 
     # def get_success_url(self):
     #     return reverse_lazy('vendor-details-url')
+
+
+class ProductDetailsView(DetailView):
+    template_name = 'admin/vendor/product_details.html'
+    model = Product

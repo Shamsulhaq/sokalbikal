@@ -175,6 +175,9 @@ class Product(models.Model):
     def get_absolute_vendor_product_details_url(self):
         return reverse("-vendor-product-details", kwargs={"slug": self.slug})
 
+    def get_absolute_admin_product_details_url(self):
+        return reverse("admin-product-details-url", kwargs={"slug": self.slug})
+
     def get_absolute_update_url(self):
         return reverse("product-update", kwargs={"slug": self.slug})
 

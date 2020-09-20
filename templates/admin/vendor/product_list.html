@@ -20,7 +20,7 @@
 
             <tbody>
             {% for product in product_list %}
-                <tr onclick="window.location='';" data-href=''>
+                <tr onclick="window.location='{{ product.get_absolute_admin_product_details_url }}';" data-href=''>
                     <td>{{ product.product_id }}</td>
                     <td>{{ product.item.item_name }}</td>
                     <td>{{ product.item.category }}</td>
