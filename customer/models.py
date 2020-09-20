@@ -40,14 +40,14 @@ class CustomerManager(models.Manager):
         return CustomerQuerySet(self.model, using=self._db)
 
     def all(self):
-        return self.get_queryset().get_all()
+        return self.get_queryset().all()
 
 
 class Customer(models.Model):
     person = models.ForeignKey(User, on_delete=models.CASCADE, related_name='customer_user')
-    date_of_birth = models.DateField()
+    date_of_birth = models.DateField(blank=True,null=True)
     image = models.ImageField(upload_to=upload_image_path, blank=True)
-    address = models.CharField(max_length=250)
+    address = models.CharField(max_length=250,blank=True)
     is_active = models.BooleanField(default=False)
     timestamp = models.DateTimeField(auto_now_add=True)
     last_update = models.DateTimeField(auto_now=True)
@@ -61,11 +61,14 @@ class Customer(models.Model):
     def title(self):
         return self.person.first_name +" "+self.person.last_name
 
-    # def get_absolute_url(self):
-    #     return reverse('post-detail', kwargs={"slug": self.slug})
+    def get_absolute_url(self):
+        return reverse('customer-details-url', kwargs={"slug": self.slug})
 
     def get_absolute_update_url(self):
         return reverse("customer-profile-update", kwargs={"pk": self.pk})
+
+    def get_absolute_status_url(self):
+        return reverse('customer-status-update-url',kwargs={'slug':self.slug})
 
     # def get_absolute_delete_url(self):
     #     return reverse("delete-post", kwargs={"slug": self.slug})

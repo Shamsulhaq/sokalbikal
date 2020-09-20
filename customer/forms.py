@@ -18,3 +18,14 @@ class CustomerRegistrationForm(forms.ModelForm):
         widgets = {
             'date_of_birth': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
         }
+
+
+class CustomerStatusUpdateForm(forms.ModelForm):
+    class Meta:
+        model = Customer
+        fields = (
+            'is_active',
+        )
+        labels = {
+            'is_active': 'Are You Agree to Verified'
+        }
