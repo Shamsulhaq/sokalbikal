@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container" style="padding-top:20px">
+    <div>
+        <h2 style="padding-bottom: 10px;">Category Details "{{ object }}"</h2>
+    </div>
+    <table class="table table-bordered col-md-4">
+        <thead>
+        {% for item, name in categories %}
+        <tr>
+            <th scope="col">{{ item }}</th>
+            <td>{{ name }}</td>
+        </tr>
+        {% endfor %}
+        </thead>
+    </table>
+
+</div>
+
+<div class="container row">
+    <h6 style="padding: 0px 10px 0px 20px;"><a href="update" class="btn btn-outline-primary">Update</a></h6>
+</div>
+
+{% endblock %}

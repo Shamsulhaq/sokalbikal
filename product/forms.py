@@ -1,6 +1,19 @@
 from django import forms
 
-from .models import Item, Product
+from .models import Category,Item, Product
+
+
+class CategoryCreationForm(forms.ModelForm):
+    class Meta:
+        model = Category
+        fields = [
+            'keyword',
+            'parent'
+        ]
+        labels = {
+            'keyword':'Category',
+            'parent':'Main Category'
+        }
 
 
 class ItemCreationFrom(forms.ModelForm):
