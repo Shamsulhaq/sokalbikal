@@ -63,7 +63,7 @@ class User(AbstractBaseUser):
     phone_regex = RegexValidator(regex=r'^\+?1?\d{9,15}$',
                                  message="Phone number must be entered in the format: '+999999999'. Up to 15 digits allowed.")
     phone = models.CharField(_('phone number'), validators=[phone_regex], max_length=17,
-                             unique=True)
+                             unique=True,blank=True,null=True)
     date_joined = models.DateTimeField(verbose_name='date joined', auto_now_add=True)
     last_login = models.DateTimeField(verbose_name='last login', auto_now=True)
     # notice the absence of a "Password field", that is built in.
