@@ -1,13 +1,17 @@
 from django.shortcuts import render
 from django.urls import reverse
-from django.views.generic import CreateView, UpdateView, ListView
+from django.views.generic import DetailView, ListView
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.generic.edit import FormMixin
+
+from cart.forms import CartAddProductForm
 from sokalbikall.permissions_mixin import VendorRequiredMixin
 from vendor.models import Vendor
 from .models import Product
 from .forms import ItemCreationFrom
 
 
+# +========================= ADMIN SIDE+=========================================
 class AllProductView(ListView):
     template_name = 'product_list.html'
     model = Product
@@ -32,3 +36,25 @@ class AllActiveProductList(ListView):
 
     def get_queryset(self):
         return Product.objects.get_active_vendor_product()
+
+
+# ===========================+++++====================================================
+# ==============================+ Client Side +=======================================
+
+class ProductListView(ListView, FormMixin):
+    template_name = 'temporary/product_list.html'
+    model = Product
+    form_class = CartAddProductForm
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Active Products'
+        return context
+
+    def get_queryset(self):
+        return Product.objects.get_active_vendor_product()
+
+
+class ProductDetailsView(DetailView):
+    template_name = 'temporary/product_details.html'
+    model = Product
