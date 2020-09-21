@@ -1,0 +1,9 @@
+<form method="POST" action="{% url 'cart-create-url' object.pk %}" class="form">
+    {% csrf_token %}
+    {% if next_url %}
+        <input type="hidden" name="next" value="{{ next_url }}">
+    {% endif %}
+    {{ form }}
+    <input type="submit" value="add to cart" class="">
+
+</form>

@@ -184,6 +184,9 @@ class Product(models.Model):
     def get_absolute_update_url(self):
         return reverse("product-update", kwargs={"slug": self.slug})
 
+    def get_absolute_url(self):
+        return reverse("product-details", kwargs={"slug": self.slug})
+
 
 # ======================+ Stock Section +==========================================
 # class StockQuerySet(models.QuerySet):

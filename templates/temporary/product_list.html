@@ -1,0 +1,25 @@
+{% extends 'temporary/base.html' %}
+{% block container %}
+    {% for item in object_list %}
+        <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card h-100">
+                {% if item.item.image %}
+                    <a href="#"><img class="card-img-top" src="{{ item.item.image.url }}" alt=""></a>
+                {% else %}
+                    <a href="#"><img class="card-img-top" src="http://placehold.it/700x400" alt=""></a>
+                {% endif %}
+                <div class="card-body">
+                    <h4 class="card-title">
+                        <a href="{{ item.get_absolute_url }}">{{ item.item.item_name }} - {{ item.size }}</a>
+                    </h4>
+                    <h5>{{ item.price }} BDT {% if not item.regular_price == 0 %}
+                        <del>{{ item.regular_price }} BDT{% endif %}</del>
+                    </h5>
+                </div>
+                <div class="card-footer">
+                    {% include 'snippets/cart_update.html' with object=item next_url=request.build_absolute_uri  %}
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+{% endblock %}

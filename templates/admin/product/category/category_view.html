@@ -45,24 +45,6 @@
         <h3 class="h3">{{ title }}</h3>
         <div class="row">
             <div class="col-md-6">
-                {#                <div class="table-responsive">#}
-                {#                    <table class="table table-bordered table-hover" id="dataTable" width="100%" cellspacing="0">#}
-                {#                        <thead>#}
-                {#                        <tr>#}
-                {#                            <th>Category</th>#}
-                {#                        </tr>#}
-                {#                        </thead>#}
-                {#                        <tbody>#}
-                {#                        {% for category in object_list %}#}
-                {#                            {% if not category.parent %}#}
-                {#                                <tr onclick="window.location='{{ category.get_absolute_url }}'" data-href=''>#}
-                {#                                    <td>{{ category.keyword }}</td>#}
-                {#                                </tr>#}
-                {#                            {% endif %}#}
-                {#                        {% endfor %}#}
-                {#                        </tbody>#}
-                {#                    </table>#}
-                {#                </div>#}
                 <ul id="myUL">
                     {% for category in object_list %}
                         {% if not category.parent %}

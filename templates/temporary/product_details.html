@@ -1,0 +1,15 @@
+{% extends 'temporary/base.html' %}
+{% block container %}
+    <div class="card mt-4 align-self-center">
+        {% if object.item.image %}
+            <img class="card-img-top img-fluid" src="{{ object.item.image.url}}" alt="">
+        {% else %}
+            <img class="card-img-top img-fluid" src="http://placehold.it/900x400" alt="">
+        {% endif %}
+        <div class="card-body">
+            <h3 class="card-title">{{ object.item.item_name}}- {{ object.size }}</h3>
+            <h4>Price: {{ object.price }} BDT {% if not object.regular_price == 0 %}-<del>{{object.regular_price}} BDT{% endif %}</del></h4>
+            <p class="card-text">{{ object.item.description|linebreaks }}</p>
+            4.0 stars
+        </div>
+{% endblock %}

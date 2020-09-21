@@ -13,6 +13,7 @@ import os
 from pathlib import Path
 from django.contrib.messages import constants as messages
 from .mail_info import *
+
 # Mail information
 EMAIL_HOST = EMAIL_HOST
 EMAIL_HOST_USER = EMAIL_HOST_USER  # SET EMAIL
@@ -62,6 +63,7 @@ LOCAL_APPS = [
     'product',
     'vendor',
     'customer',
+    'cart',
 ]
 
 INSTALLED_APPS += THIRD_PARTY_APPS + LOCAL_APPS
@@ -89,7 +91,7 @@ ROOT_URLCONF = 'sokalbikall.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR,'templates')],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -97,6 +99,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'cart.context_processors.cart',
             ],
         },
     },
@@ -168,6 +171,8 @@ MESSAGE_TAGS = {
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
+# Cart Session ID
+CART_SESSION_ID = 'cart'
 
 STATIC_URL = '/static/'
 
