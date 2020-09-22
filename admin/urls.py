@@ -1,7 +1,7 @@
 from django.urls import path
 from .views import (CategoryView, CategoryDetailsView, ProductDetailsView, ProductStatusUpdateView, VendorListView,
                     VendorDetailsView, VendorStatusUpdateView, CustomerListView, CustomerDetailsView,
-                    CustomerStatusUpdateView)
+                    CustomerStatusUpdateView,AllUserList)
 
 urlpatterns = [
     path('admin/category/list/', CategoryView.as_view(), name='category-view-url'),
@@ -15,5 +15,6 @@ urlpatterns = [
     path('admin/customer/list/', CustomerListView.as_view(), name='customer-list-url'),
     path('admin/customer/details/<slug>', CustomerDetailsView.as_view(), name='customer-details-url'),
     path('admin/customer/update/<slug>', CustomerStatusUpdateView.as_view(), name='customer-status-update-url'),
+    path('admin/user/list/',AllUserList.as_view(),name='all-user-url')
 
 ]

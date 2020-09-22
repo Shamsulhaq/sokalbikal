@@ -28,7 +28,7 @@
                         <td>{{ customer.person.email }}</td>
                         <td>{{ customer.person.phone }}</td>
                         <td>{{ customer.address }}</td>
-                        <td><a href="{{ customer.image.url }}">View</a></td>
+                        <td>{% if customer.image %}<a href="{{ customer.image.url }}">View</a>{% endif %}</td>
                         <td>{{ customer.is_active }} </td>
                         <td>{{ customer.timestamp|date:'d-m-y h:i' }} </td>
                         <td>{{ customer.last_update|date:'d-m-y h:i' }} </td>

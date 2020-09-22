@@ -4,6 +4,8 @@ from django.views.generic import DetailView, ListView, UpdateView, CreateView, F
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.edit import FormMixin
 from django.contrib.messages.views import SuccessMessageMixin, messages
+
+from accounts.models import User
 from customer.models import Customer
 from customer.forms import CustomerStatusUpdateForm
 from product.models import Product, Category
@@ -165,3 +167,16 @@ class CustomerStatusUpdateView(LoginRequiredMixin, AdminRequiredMixin, UpdateVie
 
     def get_login_url(self):
         return reverse('login')
+
+
+class AllUserList(ListView):
+    model = User
+    template_name = 'admin/user/user_list.html'
+
+    def get_queryset(self):
+        return User.objects.all()
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'User List'
+        return context
