@@ -41,7 +41,7 @@ class AllActiveProductList(ListView):
 # ===========================+++++====================================================
 # ==============================+ Client Side +=======================================
 
-class ProductListView(ListView, FormMixin):
+class PubProductListView(ListView, FormMixin):
     template_name = 'temporary/product_list.html'
     model = Product
     form_class = CartAddProductForm
@@ -52,9 +52,9 @@ class ProductListView(ListView, FormMixin):
         return context
 
     def get_queryset(self):
-        return Product.objects.get_active_vendor_product()
+        return Product.objects.get_active_all()
 
 
-class ProductDetailsView(DetailView):
+class PubProductDetailsView(DetailView):
     template_name = 'temporary/product_details.html'
     model = Product

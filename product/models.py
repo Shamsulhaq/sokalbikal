@@ -121,6 +121,9 @@ class ProductQuerySet(models.QuerySet):
     def get_active_vendor_all(self):
         return self.filter(item__creator__is_active=True)
 
+    def get_active_all(self):
+        return self.filter(item__creator__is_active=True, is_active=True)
+
     def search(self, keyword):
         lookups = (
                 Q(item__item__name__icontains=keyword) |
@@ -136,7 +139,7 @@ class ProductManager(models.Manager):
         return ProductQuerySet(self.model, using=self._db)
 
     def all(self):
-        return self.get_queryset().get_all()
+        return self.get_queryset().all()
 
     def get_by_slug(self, slug):
         qs = self.get_queryset().filter(slug=slug)
@@ -152,6 +155,9 @@ class ProductManager(models.Manager):
 
     def get_active_vendor_product(self):
         return self.get_queryset().get_active_vendor_all()
+
+    def get_active_all(self):
+        return self.get_queryset().get_active_all()
 
 
 class Product(models.Model):
@@ -176,7 +182,10 @@ class Product(models.Model):
         return self.item.item_name + self.size
 
     def get_absolute_vendor_product_details_url(self):
-        return reverse("-vendor-product-details", kwargs={"slug": self.slug})
+        return reverse("vendor-product-details", kwargs={"slug": self.slug})
+
+    def get_absolute_vendor_product_status_update_url(self):
+        return reverse("admin-product-status-update-url", kwargs={"slug": self.slug})
 
     def get_absolute_admin_product_details_url(self):
         return reverse("admin-product-details-url", kwargs={"slug": self.slug})
@@ -184,8 +193,11 @@ class Product(models.Model):
     def get_absolute_update_url(self):
         return reverse("product-update", kwargs={"slug": self.slug})
 
+    def get_absolute_public_product_details_url(self):
+        return reverse("customer-product-details-url", kwargs={"slug": self.slug})
+
     def get_absolute_url(self):
-        return reverse("product-details", kwargs={"slug": self.slug})
+        return reverse("admin-product-details-url", kwargs={"slug": self.slug})
 
 
 # ======================+ Stock Section +==========================================

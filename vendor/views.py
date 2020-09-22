@@ -154,3 +154,5 @@ class ProductUpdateView(LoginRequiredMixin, VendorRequiredMixin, UpdateView):
 class ProductDetailsView(LoginRequiredMixin,VendorRequiredMixin, DetailView):
     template_name = 'product/product_details.html'
     model = Product
+
+

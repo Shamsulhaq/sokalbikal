@@ -29,8 +29,8 @@
                         <td>{{ vendor.shop_location }}</td>
                         <td>{{ vendor.help_line }}</td>
                         <td>{{ vendor.shop_type }}</td>
-                        <td><a href="{{ vendor.image.url }}">View</a></td>
-                        <td><a href="{{ vendor.trade_licence.url }}">View</a></td>
+                        <td>{% if endor.image %}<a href="{{ vendor.image.url }}">View</a>{% endif %}</td>
+                        <td>{% if vendor.trade_licence %}<a href="{{ vendor.trade_licence.url }}">View{% endif %}</a></td>
                         <td>{{ vendor.is_active }} </td>
                         <td>{{ vendor.timestamp|date:'d-m-y h:i' }} </td>
                         <td>{{ vendor.last_update|date:'d-m-y h:i' }} </td>

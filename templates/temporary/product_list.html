@@ -10,7 +10,7 @@
                 {% endif %}
                 <div class="card-body">
                     <h4 class="card-title">
-                        <a href="{{ item.get_absolute_url }}">{{ item.item.item_name }} - {{ item.size }}</a>
+                        <a href="{{ item.get_absolute_public_product_details_url }}">{{ item.item.item_name }} - {{ item.size }}</a>
                     </h4>
                     <h5>{{ item.price }} BDT {% if not item.regular_price == 0 %}
                         <del>{{ item.regular_price }} BDT{% endif %}</del>

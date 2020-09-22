@@ -44,13 +44,6 @@ class AccountManager(BaseUserManager):
         return user
 
 
-# Role_CHOOSE = (
-#     ('vendor', 'Vendor'),
-#     ('customer', 'Customer'),
-#     ('admin', 'Admin')
-# )
-
-
 class User(AbstractBaseUser):
     first_name = models.CharField(max_length=30, )
     last_name = models.CharField(max_length=30, )
@@ -63,7 +56,7 @@ class User(AbstractBaseUser):
     phone_regex = RegexValidator(regex=r'^\+?1?\d{9,15}$',
                                  message="Phone number must be entered in the format: '+999999999'. Up to 15 digits allowed.")
     phone = models.CharField(_('phone number'), validators=[phone_regex], max_length=17,
-                             unique=True,blank=True,null=True)
+                             unique=True, blank=True, null=True)
     date_joined = models.DateTimeField(verbose_name='date joined', auto_now_add=True)
     last_login = models.DateTimeField(verbose_name='last login', auto_now=True)
     # notice the absence of a "Password field", that is built in.
@@ -78,6 +71,7 @@ class User(AbstractBaseUser):
 
     def get_full_name(self):
         return self.first_name + ' ' + self.last_name
+
     def has_perm(self, perm, obj=None):
         "Does the user have a specific permission?"
         # Simplest possible answer: Yes, always

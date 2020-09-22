@@ -2,10 +2,10 @@ from django.contrib import messages
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse
 # Create your views here.
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from django.utils.http import is_safe_url
 from django.views.decorators.http import require_POST
-from django.views.generic import ListView
+from django.views.generic import ListView, DeleteView
 from django.views.generic.edit import FormMixin
 
 from product.models import Product
@@ -44,7 +44,6 @@ def cart_add(request, pk):
         cd = form.cleaned_data
         print(cd)
         cart.add(product=product, quantity=cd['quantity'], update_quantity=cd['update'])
-        messages.success(request, "Your Cart item Added")
         if is_safe_url(redirect_path, request.get_host()):
             return redirect(redirect_path)
         else:
@@ -63,3 +62,10 @@ class CartListView(ListView):
 
     def get_queryset(self):
         return Cart(self.request)
+
+
+def cart_remove(request, pk):
+    cart = Cart(request)
+    product = get_object_or_404(Product, pk=pk)
+    cart.remove(product)
+    return redirect('cart-list-url')

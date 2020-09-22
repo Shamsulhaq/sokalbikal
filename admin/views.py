@@ -7,7 +7,7 @@ from django.contrib.messages.views import SuccessMessageMixin, messages
 from customer.models import Customer
 from customer.forms import CustomerStatusUpdateForm
 from product.models import Product, Category
-from product.forms import CategoryCreationForm
+from product.forms import CategoryCreationForm, ProductStatusUpdateFrom
 from sokalbikall.permissions_mixin import AdminRequiredMixin
 from vendor.models import Vendor
 from vendor.forms import VendorStatusUpdateForm
@@ -59,6 +59,31 @@ class CategoryDetailsView(LoginRequiredMixin, AdminRequiredMixin, DetailView):
         return context
 
 
+class ProductDetailsView(LoginRequiredMixin, AdminRequiredMixin, DetailView, FormMixin):
+    template_name = 'admin/vendor/product_details.html'
+    model = Product
+    form_class = ProductStatusUpdateFrom
+
+
+class ProductStatusUpdateView(LoginRequiredMixin, AdminRequiredMixin, UpdateView):
+    form_class = ProductStatusUpdateFrom
+    template_name = 'accounts/profile_update.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Product Status Update'
+        return context
+
+    def get_queryset(self):
+        return Product.objects.filter(slug=self.kwargs.get('slug'))
+
+    def get_login_url(self):
+        return reverse('login')
+
+    # def get_success_url(self):
+    #     return reverse_lazy('admin-product-details-url',slug=self.kwargs.get('slug'))
+
+
 class VendorListView(LoginRequiredMixin, AdminRequiredMixin, ListView):
     template_name = 'admin/vendor/vendor_list.html'
     model = Vendor
@@ -100,11 +125,6 @@ class VendorStatusUpdateView(LoginRequiredMixin, AdminRequiredMixin, UpdateView)
 
     # def get_success_url(self):
     #     return reverse_lazy('vendor-details-url')
-
-
-class ProductDetailsView(LoginRequiredMixin, AdminRequiredMixin, DetailView):
-    template_name = 'admin/vendor/product_details.html'
-    model = Product
 
 
 class CustomerListView(LoginRequiredMixin, AdminRequiredMixin, ListView):
