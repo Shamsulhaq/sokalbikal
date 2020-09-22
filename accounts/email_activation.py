@@ -125,4 +125,4 @@ def post_save_user_create_receiver(sender, instance, created, *args, **kwargs):
 
 
 pre_save.connect(pre_save_email_activation, sender=EmailActivation)
-post_save.connect(post_save_user_create_receiver, sender=User)
+# post_save.connect(post_save_user_create_receiver, sender=User)

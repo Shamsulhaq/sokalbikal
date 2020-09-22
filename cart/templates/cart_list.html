@@ -29,15 +29,16 @@
 
                                 <td>
                                     {% with next_url=request.build_absolute_uri %}
-                                        <form action="{% url "cart-create-url" product.pk %}" method="post" id="update{{ product.pk }}">
+                                        <form action="{% url "cart-create-url" product.pk %}" method="post"
+                                              id="update{{ product.pk }}">
                                             {% if next_url %}
                                                 <input type="hidden" name="next" value="{{ next_url }}">
                                             {% endif %}
                                             {% csrf_token %}
                                             {{ item.update_quantity_form.quantity }}
                                             {{ item.update_quantity_form.update }}
-                                            <input type="submit" value="Update" class="btn-sm btn-info">
-{# ++========================   Below Code For Dynamic Id and automatic form submit ======================#}
+                                            {#                                            <input type="submit" value="Update" class="btn-sm btn-info">#}
+                                            {# ++========================   Below Code For Dynamic Id and automatic form submit ======================#}
                                             <script type="text/javascript">
                                                 document.getElementById("id_quantity").id = "id_quantity{{ product.pk }}";
                                                 document.getElementById("id_quantity{{ product.pk }}").addEventListener("change", submit);
@@ -46,13 +47,13 @@
                                                     document.getElementById("update{{ product.pk }}").submit();
                                                 }
                                             </script>
-{#  ============================================================================================ #}
+                                            {#  ============================================================================================ #}
                                         </form>
                                     {% endwith %}
                                 </td>
                                 <td>{{ item.price }} TK</td>
 
-                                {#                                <td><a href="{% url "cart-remove-url" product.id %}"><i class="far fa-trash-alt"></i></a></td>#}
+                                <td><a href="{% url "cart-remove-url" product.pk %}">X<i class="fas fa-minus-circle"></i></a></td>
                             </tr>
                         {% endwith %}
                     {% endfor %}

@@ -16,6 +16,17 @@
             transform: scale(2);
         }
     </style>
+    {# ++++++++++++++++++++++++Update Alart++++++++++++++++++++++++++ #}
+    <script>
+        function myFunction(name, e) {
+            if (confirm("Are you want to Change " + name + "!")) {
+                $('#verified_product').submit()
+            } else {
+                e.preventDefault();
+            }
+        }
+    </script>
+    {#    ++++++++++++++++++++++++#}
     <br>
 
     <div class="card">
@@ -47,7 +58,9 @@
                         </tr>
                         <tr>
                             <th style="border-top: 0px;" scope="row">Product Shop:</th>
-                            <td style="border-top: 0px;"><a href="{{ object.item.creator.get_absolute_url }}">{{ object.item.creator.shop_name }}</a></td>
+                            <td style="border-top: 0px;"><a
+                                    href="{{ object.item.creator.get_absolute_url }}">{{ object.item.creator.shop_name }}</a>
+                            </td>
                         </tr>
                         <tr>
                             <th style="border-top: 0px;" scope="row">Price:</th>
@@ -71,7 +84,24 @@
                         </tr>
                         <tr>
                             <th scope="row">Last Update:</th>
-                            <td>{{ object.last_update|date:'d-m-y (h:i a)'}}</td>
+                            <td>{{ object.last_update|date:'d-m-y (h:i a)' }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Is SellAble</th>
+                            <td>{% if object.is_active %}Yes {% else %} No{% endif %}
+                                <form id='verified_product' method="POST" class="float-right"
+                                      action="{{ object.get_absolute_vendor_product_status_update_url }}">
+                                    {% csrf_token %}
+                                    {% if object.is_active %}
+                                        <input type="hidden" name="is_active" value="False">
+                                    {% else %}
+                                        <input type="hidden" name="is_active" value="True">
+                                    {% endif %}
+                                    <a style="padding-left:-10px"
+                                       onclick="myFunction('{{ object.item.item_name }}')"
+                                       class="btn btn-sm btn-danger"> Make Change</a>
+                                </form>
+                            </td>
                         </tr>
                         <tr>
                             <th scope="row">Return Policy:</th>

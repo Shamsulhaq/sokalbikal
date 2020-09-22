@@ -1,6 +1,6 @@
 from django import forms
 
-from .models import Category,Item, Product
+from .models import Category, Item, Product
 
 
 class CategoryCreationForm(forms.ModelForm):
@@ -11,8 +11,8 @@ class CategoryCreationForm(forms.ModelForm):
             'parent'
         ]
         labels = {
-            'keyword':'Category',
-            'parent':'Main Category'
+            'keyword': 'Category',
+            'parent': 'Main Category'
         }
 
 
@@ -40,4 +40,9 @@ class ProductCreationFrom(forms.ModelForm):
         ]
 
 
-
+class ProductStatusUpdateFrom(forms.ModelForm):
+    class Meta:
+        model = Product
+        fields = [
+            'is_active'
+        ]
