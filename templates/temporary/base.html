@@ -46,19 +46,16 @@
                 <li class="nav-item">
                     <a class="nav-link" href="#">Contact</a>
                 </li>
-                <div class="cart">
-                    {% with total_items=cart|length %}
-                        {% if cart|length > 0 %}
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">{{ total_items }} item{{ total_items|pluralize }},
-                                ${{ cart.get_total_price }}</a>
-                            </li>
 
-                        {% else %}
-                            Your cart is empty.
-                        {% endif %}
-                    {% endwith %}
-                </div>
+                {% with total_items=cart|length %}
+                    {% if cart|length > 0 %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'cart-list-url' %}">{{ total_items }} item{{ total_items|pluralize }},
+                                {{ cart.get_total_price }}BDT</a>
+
+                        </li>
+                    {% endif %}
+                {% endwith %}
 
 
             </ul>
@@ -85,7 +82,7 @@
 
         <div class="col-lg-9">
             <div class="row mt-3">
-                {% block container %}
+                {% block content %}
 
                 {% endblock %}
 

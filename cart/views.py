@@ -5,7 +5,8 @@ from django.http import HttpResponse
 from django.urls import reverse
 from django.utils.http import is_safe_url
 from django.views.decorators.http import require_POST
-from django.views.generic import CreateView,FormView
+from django.views.generic import ListView
+from django.views.generic.edit import FormMixin
 
 from product.models import Product
 from .forms import CartAddProductForm
@@ -48,5 +49,17 @@ def cart_add(request, pk):
             return redirect(redirect_path)
         else:
             return redirect('/')
-
     return redirect('product-home-url')
+
+
+class CartListView(ListView):
+    template_name = 'cart_list.html'
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        for item in Cart(self.request):
+            item['update_quantity_form'] = CartAddProductForm(initial={'quantity': item['quantity'], 'update': True})
+        return context
+
+    def get_queryset(self):
+        return Cart(self.request)
