@@ -64,6 +64,7 @@ LOCAL_APPS = [
     'vendor',
     'customer',
     'cart',
+    'order',
 ]
 
 INSTALLED_APPS += THIRD_PARTY_APPS + LOCAL_APPS

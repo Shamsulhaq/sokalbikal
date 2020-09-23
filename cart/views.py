@@ -42,7 +42,6 @@ def cart_add(request, pk):
     form = CartAddProductForm(request.POST)
     if form.is_valid():
         cd = form.cleaned_data
-        print(cd)
         cart.add(product=product, quantity=cd['quantity'], update_quantity=cd['update'])
         if is_safe_url(redirect_path, request.get_host()):
             return redirect(redirect_path)
@@ -69,3 +68,4 @@ def cart_remove(request, pk):
     product = get_object_or_404(Product, pk=pk)
     cart.remove(product)
     return redirect('cart-list-url')
+
