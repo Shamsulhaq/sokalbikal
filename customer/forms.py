@@ -13,6 +13,7 @@ class CustomerRegistrationForm(forms.ModelForm):
         fields = (
             'image',
             'date_of_birth',
+            'gender',
             'address'
         )
         widgets = {

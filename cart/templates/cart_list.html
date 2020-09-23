@@ -24,7 +24,7 @@
                                 <td>{{ forloop.counter }}</td>
                                 <td><img width="40px"
                                          src="{% if product.item.image %} {{ product.item.image.url }} {% else %} {% static 'img/book_image.png' %} {% endif %}">
-                                    <a href="{{ product.get_absolute_url }}">{{ product.item.item_name }}-{{ product.size }} </a>
+                                    <a href="{{ product.get_absolute_public_product_details_url }}">{{ product.item.item_name }}-{{ product.size }} </a>
                                 </td>
 
                                 <td>
