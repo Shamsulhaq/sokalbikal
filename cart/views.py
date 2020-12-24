@@ -69,3 +69,4 @@ def cart_remove(request, pk):
     product = get_object_or_404(Product, pk=pk)
     cart.remove(product)
     return redirect('cart-list-url')
+

@@ -1,12 +1,13 @@
 {% extends 'temporary/base.html' %}
+{% load crispy_forms_tags %}
 {% load static %}
 {% block title %}
     Your Shopping Cart{% endblock %}
 {% block content %}
-    {% if cart %}
-        <h2>Cart List</h2>
-        <div class="row">
-            <div class="col-sm-12 col-md-9 col-lg-9">
+    <div class="row">
+        <div class="col-6">
+            {% if cart %}
+                <h2>Cart List</h2>
                 <table class="table">
                     <thead>
                     <tr>
@@ -18,7 +19,7 @@
                     </tr>
                     </thead>
                     <tbody>
-                    {% for item in object_list %}
+                    {% for item in cart %}
                         {% with product=item.product %}
                             <tr>
                                 <td>{{ forloop.counter }}</td>
@@ -53,7 +54,8 @@
                                 </td>
                                 <td>{{ item.price }} TK</td>
 
-                                <td><a href="{% url "cart-remove-url" product.pk %}">X<i class="fas fa-minus-circle"></i></a></td>
+                                <td><a href="{% url "cart-remove-url" product.pk %}">X<i
+                                        class="fas fa-minus-circle"></i></a></td>
                             </tr>
                         {% endwith %}
                     {% endfor %}
@@ -63,40 +65,26 @@
                         <td colspan="2"></td>
                         <td>
                             <button onclick="window.location.href='{% url 'product-home-url' %}'"
-                                    class="btn-success text-center"><i class="fas fa-luggage-cart"></i>Continue Shopping
+                                    class="btn-success text-center"><i class="fas fa-luggage-cart"></i>Continue
+                                Shopping
                             </button>
                         </td>
                     </tr>
 
                     </tbody>
                 </table>
-            </div>
-            <div class="col-sm-12 col-md-3 col-lg-3 ">
-                <p class="lead">Checkout Summary</p>
-                <hr>
-                <p>Payment Details</p>
-                <div class="row ">
-                    <div class="mr-auto col"><b>Total: </b></div>
-                    <div class="ml-auto col"><p> {{ cart.get_total_price }} Tk</p></div>
                 </div>
-                <div class="row ">
-                    <div class="mr-auto col"></div>
-                    <div class="ml-auto col"><a href="{% url 'cart-submit-url' %}"
-                                                class="btn btn-success">Checkout</a>
-                    </div>
-                </div>
-            </div>
+            {% else %}
+                <p class="center">Cart is Empty </p>
+            {% endif %}
+        <div class="col-6">
+            <h4>Choose </h4>
+            <form method="post">
+                {% csrf_token %}
+                {{ form|crispy }}
+                <input type="submit" value="Place Order">
+            </form>
         </div>
-
-    {% else %}
-        <p class="center">Cart is Empty </p>
-    {% endif %}
-    {#    <script type="text/javascript">#}
-    {#        document.getElementById("id_quantity").addEventListener("change", submit);#}
-    {##}
-    {#        function submit() {#}
-    {#            document.getElementById("update").submit();#}
-    {#        }#}
-    {#    </script>#}
+    </div>
 {% endblock %}
 

@@ -12,7 +12,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from sokalbikall.permissions_mixin import VendorRequiredMixin
 from .models import Vendor
 from product.forms import ItemCreationFrom, ProductCreationFrom
-
+from ordermanager.models import Item as OrderItem
 
 class VendorProfileUpdateView(LoginRequiredMixin, UpdateView):
     form_class = VendorUpdateForm
@@ -156,3 +156,16 @@ class ProductDetailsView(LoginRequiredMixin,VendorRequiredMixin, DetailView):
     model = Product
 
 
+class OrderListView(LoginRequiredMixin,VendorRequiredMixin,ListView):
+    template_name = 'order_product_list.html'
+    model = OrderItem
+    context_object_name = 'product_list'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Order Product List'
+        return context
+
+    def get_queryset(self):
+        data = OrderItem.objects.filter(product__item__creator__vendor=self.request.user)
+        return data

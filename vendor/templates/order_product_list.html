@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %} {{ title }} || {{ block.super }}{% endblock title %}
+{% block content %}
+    <div class="card-body">
+        <h3 class="h3">{{ title }}</h3>
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover" id="dataTable" width="100%" cellspacing="0">
+                <thead>
+                <tr>
+                    <th>Product ID</th>
+                    <th>Product Name</th>
+                    <th>Category</th>
+                    <th>Brand</th>
+                    <th>size</th>
+                    <th>Status</th>
+                    <th>Price</th>
+                    <th>Order quantity</th>
+                    <th>Created</th>
+                    <th>#</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                {% for product in product_list %}
+                    <tr onclick="window.location='{{ product.get_absolute_vendor_product_details_url }}'" data-href=''>
+                        <td>{{ product.product.product_id }}</td>
+                        <td>{{ product.product.item.item_name }}</td>
+                        <td>{{ product.product.item.category }}</td>
+                        <td>{{ product.product.item.brand }}</td>
+                        <td>{{ product.product.size }}</td>
+                        <td>{{ product.status }}</td>
+                        <td>{{ product.price }} </td>
+                        <td>{{ product.quantity }} </td>
+                        <td>{{ product.created|date:'d-m-y h:i a' }} </td>
+                        <td><a href="{{ product.get_absolute_update_url }}" title="Update"><i
+                                class="fas fa-edit"></i></a></td>
+
+
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+{% endblock %}

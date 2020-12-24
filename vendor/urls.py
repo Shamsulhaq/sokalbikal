@@ -3,7 +3,7 @@ from django.urls import path
 from vendor.views import (
     VendorProfileUpdateView, ItemCreateView, ItemUpdateView, VendorItemListView,
     ProductCreateView, ProductListView,
-    ProductUpdateView, ProductDetailsView
+    ProductUpdateView, ProductDetailsView,OrderListView
 
 )
 
@@ -18,4 +18,6 @@ urlpatterns = [
          name='product-update'),
     path('vendor/product/list/', ProductListView.as_view(), name='vendor-product-list'),
     path('vendor/product/details/<slug>', ProductDetailsView.as_view(), name='vendor-product-details'),
+    path('vendor/order/list/', OrderListView.as_view(), name='vendor-order-list'),
+
 ]

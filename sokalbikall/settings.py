@@ -15,11 +15,11 @@ from django.contrib.messages import constants as messages
 from .mail_info import *
 
 # Mail information
-EMAIL_HOST = EMAIL_HOST
-EMAIL_HOST_USER = EMAIL_HOST_USER  # SET EMAIL
-EMAIL_HOST_PASSWORD = EMAIL_HOST_PASSWORD  # SET PASSWORD OR APP PASSWORD
-EMAIL_PORT = EMAIL_PORT
-EMAIL_USE_TLS = EMAIL_USE_TLS
+# EMAIL_HOST = EMAIL_HOST
+# EMAIL_HOST_USER = EMAIL_HOST_USER  # SET EMAIL
+# EMAIL_HOST_PASSWORD = EMAIL_HOST_PASSWORD  # SET PASSWORD OR APP PASSWORD
+# EMAIL_PORT = EMAIL_PORT
+# EMAIL_USE_SSL = EMAIL_USE_SSL
 DEFAULT_FROM_EMAIL = 'Sokalbikal'
 BASE_URL = '127.0.0.1:8000'  # SET YOUR BASE URL [BASE_URL = '127.0.0.1:8000']
 
@@ -56,6 +56,8 @@ INSTALLED_APPS = [
 THIRD_PARTY_APPS = [
     'widget_tweaks',
     'mptt',
+    'image_optimizer',
+    'crispy_forms',
 ]
 
 LOCAL_APPS = [
@@ -64,6 +66,8 @@ LOCAL_APPS = [
     'vendor',
     'customer',
     'cart',
+    'ordermanager',
+    'core',
 ]
 
 INSTALLED_APPS += THIRD_PARTY_APPS + LOCAL_APPS
@@ -184,3 +188,4 @@ STATIC_ROOT = "/static/"
 MEDIA_URL = '/media/'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+OPTIMIZED_IMAGE_METHOD = 'pillow'

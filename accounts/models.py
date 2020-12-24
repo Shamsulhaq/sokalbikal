@@ -1,8 +1,10 @@
+from django.contrib.contenttypes.fields import GenericForeignKey
+from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from django.core.validators import RegexValidator
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import (
-    BaseUserManager, AbstractBaseUser
+    BaseUserManager, AbstractBaseUser, PermissionsMixin
 )
 
 
@@ -20,7 +22,8 @@ class AccountManager(BaseUserManager):
         user = self.model(
             email=self.normalize_email(email),
             first_name=first_name,
-            last_name=last_name
+            last_name=last_name,
+            is_active=True
         )
         user.set_password(password)
         user.save(using=self._db)
@@ -44,7 +47,7 @@ class AccountManager(BaseUserManager):
         return user
 
 
-class User(AbstractBaseUser):
+class User(AbstractBaseUser, PermissionsMixin):
     first_name = models.CharField(max_length=30, )
     last_name = models.CharField(max_length=30, )
     email = models.EmailField(verbose_name='email', max_length=60, unique=True)
@@ -53,14 +56,9 @@ class User(AbstractBaseUser):
     is_staff = models.BooleanField(default=False)  # a admin user; non super-user
     is_superuser = models.BooleanField(default=False)
     role = models.CharField(max_length=10)
-    phone_regex = RegexValidator(regex=r'^\+?1?\d{9,15}$',
-                                 message="Phone number must be entered in the format: '+999999999'. Up to 15 digits allowed.")
-    phone = models.CharField(_('phone number'), validators=[phone_regex], max_length=17,
-                             unique=True, blank=True, null=True)
+    phone = models.CharField(max_length=17, unique=True, blank=True, null=True)
     date_joined = models.DateTimeField(verbose_name='date joined', auto_now_add=True)
     last_login = models.DateTimeField(verbose_name='last login', auto_now=True)
-    # notice the absence of a "Password field", that is built in.
-
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['first_name', 'last_name']  # Email & Password are required by default.
 
@@ -81,3 +79,35 @@ class User(AbstractBaseUser):
         "Does the user have permissions to view the app `app_label`?"
         # Simplest possible answer: Yes, always
         return True
+
+
+class BaseModels(models.Model):
+    created = models.DateTimeField(auto_now_add=True)
+    update = models.DateTimeField(auto_now=True)
+    active = models.BooleanField(default=True)
+
+
+class UnitOfHistory(models.Model):
+    created = models.DateTimeField(auto_now_add=True)
+    title = models.CharField(
+        max_length=255,
+        blank=True, null=True,
+        verbose_name="Name of Content",
+        help_text="The name of the content from which this unit of history is generated"
+    )
+    description = models.CharField(
+        max_length=255,
+        blank=True, null=True,
+        verbose_name="Description of Content",
+        help_text="From where this unit of history is generated"
+    )
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name="history"
+    )
+    # Generic Foreignkey Configuration. DO NOT CHANGE
+    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
+    object_id = models.PositiveIntegerField()
+    content_object = GenericForeignKey()
+

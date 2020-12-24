@@ -3,7 +3,7 @@ import random
 
 from django.core.files.storage import FileSystemStorage
 from django.db import models
-from django.db.models.signals import pre_save, post_save
+from django.db.models.signals import pre_save, post_init
 from django.template.defaultfilters import slugify
 from django.urls import reverse
 from mptt.models import MPTTModel, TreeForeignKey
@@ -14,6 +14,7 @@ from vendor.models import Vendor
 from django.utils.translation import ugettext_lazy as _
 # Create your models here.
 from sokalbikall.utils import unique_slug_generator, unique_product_id_generator
+from image_optimizer.fields import OptimizedImageField
 
 fs = FileSystemStorage(location='media')
 
@@ -89,7 +90,16 @@ class Item(models.Model):
     category = TreeForeignKey(Category, on_delete=models.CASCADE, blank=True, null=True,
                               related_name='product_category')
     description = models.TextField()
-    image = models.ImageField(upload_to=upload_image_path, blank=True)
+    # image = models.ImageField(upload_to=upload_image_path, blank=True)
+    # OptimizedImageField use for image optimization
+    image = OptimizedImageField(upload_to=upload_image_path,
+                                optimized_image_output_size=(400, 300),
+                                optimized_image_resize_method='cover', blank=True) # 'thumbnail', 'cover' or None
+
+    image_thumbnail = OptimizedImageField(upload_to=upload_image_path,
+                                optimized_image_output_size=(860, 440),
+                                optimized_image_resize_method='thumbnail', blank=True)
+
     brand = models.CharField(max_length=50)
     creator = models.ForeignKey(Vendor, related_name='product_creator', on_delete=models.CASCADE)
     is_active = models.BooleanField(default=True)
@@ -254,9 +264,18 @@ def category_pre_save_receiver(sender, instance, *args, **kwargs):
 pre_save.connect(category_pre_save_receiver, sender=Category)
 
 
+def item_pre_init_receiver(sender, instance, *args, **kwargs):
+    if not instance.image_thumbnail:
+        instance.image_thumbnail = instance.image
+
+
+post_init.connect(item_pre_init_receiver, sender=Item)
+
+
 def item_pre_save_receiver(sender, instance, *args, **kwargs):
     if not instance.slug:
         instance.slug = unique_slug_generator(instance)
+
 
 
 pre_save.connect(item_pre_save_receiver, sender=Item)

@@ -24,7 +24,7 @@
 <!-- Navigation -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
     <div class="container">
-        <a class="navbar-brand" href="{% url 'index'%}">Sokalbikal</a>
+        <a class="navbar-brand" href="{% url 'index' %}">Sokalbikal</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive"
                 aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -50,7 +50,8 @@
                 {% with total_items=cart|length %}
                     {% if cart|length > 0 %}
                         <li class="nav-item">
-                            <a class="nav-link" href="{% url 'cart-list-url' %}">{{ total_items }} item{{ total_items|pluralize }},
+                            <a class="nav-link" href="{% url 'cart-list-url' %}">{{ total_items }}
+                                item{{ total_items|pluralize }},
                                 {{ cart.get_total_price }}BDT</a>
 
                         </li>
@@ -65,22 +66,18 @@
 
 <!-- Page Content -->
 <div class="container">
-
-    <div class="row">
-
-        <div class="col-lg-3">
-
-            <h1 class="my-4">Shop Name</h1>
-            <div class="list-group">
-                <a href="#" class="list-group-item">Category 1</a>
-                <a href="#" class="list-group-item">Category 2</a>
-                <a href="#" class="list-group-item">Category 3</a>
+    <div class="align-content-center">
+        {% if messages %}
+            <div class="messages">
+                {% for message in messages %}
+                    <p {% if message.tags %} class="text-center {{ message.tags }}"{% endif %}>{{ message }}</p>
+                {% endfor %}
             </div>
+        {% endif %}
+    </div>
+    <div class="container-fluid">
+        <div class="row">
 
-        </div>
-        <!-- /.col-lg-3 -->
-
-        <div class="col-lg-9">
             <div class="row mt-3">
                 {% block content %}
 
@@ -88,28 +85,26 @@
 
 
             </div>
-            <!-- /.row -->
+
+            <!-- /.col-lg-9 -->
 
         </div>
-        <!-- /.col-lg-9 -->
+        <!-- /.row -->
 
-    </div>
-    <!-- /.row -->
-
-</div>
-<!-- /.container -->
-
-<!-- Footer -->
-<footer class="py-5 bg-dark">
-    <div class="container">
-        <p class="m-0 text-center text-white">Copyright &copy; Your Website 2020</p>
     </div>
     <!-- /.container -->
-</footer>
 
-<!-- Bootstrap core JavaScript -->
-<script src="{% static 'temporary/jquery/jquery.min.js' %}"></script>
-<script src="{% static 'temporary/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+    <!-- Footer -->
+    <footer class="py-5 bg-dark">
+        <div class="container">
+            <p class="m-0 text-center text-white">Copyright &copy; Your Website 2020</p>
+        </div>
+        <!-- /.container -->
+    </footer>
+
+    <!-- Bootstrap core JavaScript -->
+    <script src="{% static 'temporary/jquery/jquery.min.js' %}"></script>
+    <script src="{% static 'temporary/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
 
 </body>
 
